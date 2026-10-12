@@ -47,7 +47,7 @@ Automated tools catch roughly a third of WCAG issues. The report's "Still needs 
 
 Repo → **Actions** → **Site audit** → **Run workflow** → enter URL. When it finishes, the run summary links the report:
 
-- All reports: `https://hardikd143.github.io/site-audit/`
+- All reports: `https://abdul-baig-healthya.github.io/site-audit/`
 - Each run also uploads the report folder as a downloadable artifact (30 days)
 - WAVE: add repo secret `WAVE_API_KEY` (Settings → Secrets → Actions) to enable
 - Newest 30 reports are kept on Pages; the `gh-pages` branch is rewritten each run so it doesn't grow

@@ -24,6 +24,8 @@ for (const name of await readdir(reportsDir).catch(() => [])) {
 rows.sort((a, b) => b.started.localeCompare(a.started));
 for (const r of rows.splice(Number(keep))) await rm(path.join(reportsDir, r.name), { recursive: true });
 
+// Set in GitHub Actions; local builds have no workflow to link, so the Delete column is left out.
+const deleteUrl = process.env.GITHUB_REPOSITORY && `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/workflows/delete-report.yml`;
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 await writeFile(path.join(dir, 'index.html'), `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,11 +42,21 @@ th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--bor
 th { color: var(--muted); font-size: 12px; }
 td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
 tr:last-child td { border-bottom: 0; }
+.del { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); padding: 2px 8px; font: inherit; font-size: 12px; cursor: pointer; }
+.del:hover { color: #b3261e; border-color: #b3261e; }
 </style></head><body><main>
 <h1>Site audits</h1>
-<p style="color:var(--muted)">Run a new audit from the repo's Actions tab → "Site audit" → Run workflow. Newest ${esc(keep)} reports kept.</p>
-<div class="panel"><table><thead><tr><th>Site</th><th>Run (UTC)</th><th class="n">Pages</th><th class="n">axe elements</th><th class="n">Broken links</th><th class="n">LH perf</th><th class="n">LH a11y</th></tr></thead><tbody>
-${rows.map((r) => `<tr><td><a href="reports/${esc(r.name)}/report.html">${esc(new URL(r.target).hostname)}</a>${r.partial ? ' (partial)' : ''}</td><td>${esc(r.started.slice(0, 16).replace('T', ' '))}</td><td class="n">${r.pages}</td><td class="n">${r.axe}</td><td class="n">${r.broken}</td><td class="n">${r.perf}</td><td class="n">${r.a11y}</td></tr>`).join('\n') || '<tr><td colspan="7">No reports yet</td></tr>'}
-</tbody></table></div></main></body></html>
+<p style="color:var(--muted)">Run a new audit from the repo's Actions tab → "Site audit" → Run workflow. Newest ${esc(keep)} reports kept.${deleteUrl ? ' Delete copies the report name and opens the "Delete report" workflow: paste it, then Run workflow (this page updates in about a minute).' : ''}</p>
+<div class="panel"><table><thead><tr><th>Site</th><th>Run (UTC)</th><th class="n">Pages</th><th class="n">axe elements</th><th class="n">Broken links</th><th class="n">LH perf</th><th class="n">LH a11y</th>${deleteUrl ? '<th></th>' : ''}</tr></thead><tbody>
+${rows.map((r) => `<tr><td><a href="reports/${esc(r.name)}/report.html">${esc(new URL(r.target).hostname)}</a>${r.partial ? ' (partial)' : ''}</td><td>${esc(r.started.slice(0, 16).replace('T', ' '))}</td><td class="n">${r.pages}</td><td class="n">${r.axe}</td><td class="n">${r.broken}</td><td class="n">${r.perf}</td><td class="n">${r.a11y}</td>${deleteUrl ? `<td><button type="button" class="del" data-name="${esc(r.name)}">Delete</button></td>` : ''}</tr>`).join('\n') || '<tr><td colspan="8">No reports yet</td></tr>'}
+</tbody></table></div></main>
+${deleteUrl ? `<script>
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('.del');
+  if (!b) return;
+  try { await navigator.clipboard.writeText(b.dataset.name); b.textContent = 'Name copied ✓'; } catch { b.textContent = b.dataset.name; } // no clipboard: show it to copy by hand
+  window.open(${JSON.stringify(deleteUrl)}, '_blank', 'noopener');
+});
+</script>` : ''}</body></html>
 `);
 console.log(`index.html: ${rows.length} reports`);

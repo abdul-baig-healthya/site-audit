@@ -1,0 +1,38 @@
+name: Delete report
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: Report name (the Delete button on the reports page copies it)
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    concurrency: publish-pages # same lock as the audit publish job, so pushes never race
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: pages
+      - name: Remove report, rebuild index and push gh-pages
+        env:
+          NAME: ${{ inputs.name }}
+        run: |
+          NAME=$(echo "$NAME" | xargs) # trim pasted whitespace
+          if ! [[ "$NAME" =~ ^[A-Za-z0-9._-]+$ ]] || [[ "$NAME" == *..* ]]; then echo "::error::Invalid report name: $NAME"; exit 1; fi
+          if [ ! -d "pages/reports/$NAME" ]; then echo "::error::No report named $NAME"; exit 1; fi
+          rm -rf "pages/reports/$NAME"
+          node build-index.mjs pages 30
+          cd pages
+          rm -rf .git && touch .nojekyll
+          git init -q -b gh-pages
+          git add -A
+          git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -qm "Delete report $NAME"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
+          echo "### Deleted report: $NAME" >> "$GITHUB_STEP_SUMMARY"
