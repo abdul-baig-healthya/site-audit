@@ -1,0 +1,72 @@
+{
+  "target": "https://onecare-pharmacy.vercel.app/",
+  "started": "2026-10-12T06:07:37.180Z",
+  "finished": "2026-10-12T06:07:41.050Z",
+  "options": {
+    "maxPages": 500,
+    "device": "mobile",
+    "axeTags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa",
+      "best-practice"
+    ],
+    "ignoreRobots": false
+  },
+  "discovery": {
+    "robots": {
+      "found": true,
+      "raw": "<!DOCTYPE html><html data-dpl-id=\"dpl_HUE8CR3ALCaht2GmtZy9j8faYWf9\" class=\"VEU71W_className M8bjnG_className VEU71W_variable M8bjnG_variable dash\" lang=\"en-US\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/immutable/chunks/0or6acbur3js7.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/immutable/chunks/2vdz-1berqn8p.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/immutable/chunks/3-qb-ev6vlqj7.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/immutable/chunks/32vkne1-aojy1.js\"/><script src=\"/_next/static/immutable/chunks/3kzdsdm17b_08.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3bwiim3mlfwbb.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/44tmf6xjsuq2y.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/02f7sesu9w9bp.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3crllev6chvyw.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/turbopack-01ajvkb8u8coi.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2_xa4ae6n-r-r.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2mq5vjh4amfym.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/1--nwj0a1je65.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/136iug6v_57k7.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2ypp5vqf675b-.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/04t5kuji43qdf.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/33zstbdmuu_ia.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2h_itxc4s01f0.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/1amutg1ns-w6g.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/1lv5aua-97fks.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2e6ad9ft29pzk.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2dtgq_x9wjp-_.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3rtiuze_eemdm.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/222_oa_f3eeco.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3ue7z3t8pdaib.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0yamdgfl7gkzl.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3njwsf8xw95g1.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3wb7k510ah06q.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2ocu06bhfn5j3.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/1-4bp6pehq523.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3s00i5sky50ld.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/1721b9a52tlco.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0e_moda6n6_9-.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3vweb3c59uvn_.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/17dw7qs8w52yf.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2ll2trtp9yoww.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2nyetufghyb11.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0lgtydaph5_r9.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/11drcv_usn6zm.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2zsfbmpwajuse.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0jq8lh7t0zvvn.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0valoz3mhdyxc.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0ambgv387vyv1.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0kkmhz4tliqc2.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3ydo680b35bsf.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3p7c52oahdt8j.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0tr2y0scp5ry7.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/0od9ejz0_o89-.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3p1y64i679a4d.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/2nbbv7rrnp88x.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/1wbrh7s138jcf.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/1y_vpaqatih30.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3g35_e9vsvuzq.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/1nsfta6y_eblc.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3-b0l_sifdvk7.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3agbws1wlgk1m.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/144yr5__qyuh6.js\" async=\"\"></script><script src=\"/_next/static/immutable/chunks/3sgzqeqyub54z.",
+      "disallow": [],
+      "sitemaps": []
+    },
+    "sitemaps": [],
+    "sitemapUrlCount": 0,
+    "fetched": [
+      {
+        "url": "https://onecare-pharmacy.vercel.app/",
+        "source": "start",
+        "status": 200,
+        "finalUrl": "https://vercel.com/login?next=%2Fsso-api%3Furl%3Dhttps%253A%252F%252Fonecare-pharmacy.vercel.app%252F%26nonce%3Dc6fa83323fe9c62249a19b2f93a6c47d89725a44286cf6f4d4235cc7809ddf9c",
+        "contentType": "text/html; charset=utf-8",
+        "outLinks": 5
+      }
+    ],
+    "htmlPages": [],
+    "skipped": {
+      "robots": [],
+      "nonHtml": []
+    },
+    "pendingNotCrawled": 0,
+    "orphans": [],
+    "notInSitemap": []
+  },
+  "partial": false,
+  "pages": [],
+  "links": {
+    "checked": 6,
+    "broken": [],
+    "redirects": 0
+  },
+  "site": {
+    "security": {
+      "strict-transport-security": null,
+      "content-security-policy": null,
+      "x-content-type-options": null,
+      "x-frame-options": null,
+      "referrer-policy": null,
+      "permissions-policy": null
+    },
+    "server": null,
+    "httpsRedirect": true,
+    "soft404": true,
+    "notFoundStatus": 200
+  },
+  "wave": {
+    "enabled": false,
+    "results": []
+  },
+  "lighthouse": []
+}
