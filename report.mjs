@@ -38,18 +38,35 @@ nav.tabs { position: sticky; top: 0; z-index: 5; background: var(--bg); border-b
 nav.tabs div { max-width: 1280px; margin: 0 auto; padding: 0 16px; display: flex; gap: 2px; overflow-x: auto; }
 nav.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); padding: 12px 12px; font: inherit; cursor: pointer; white-space: nowrap; }
 nav.tabs button[aria-selected="true"] { color: var(--text); border-color: var(--accent); font-weight: 600; }
-main { max-width: 1280px; margin: 0 auto; padding: 20px 16px 60px; }
+main { max-width: 1280px; margin: 0 auto; padding: 28px 16px 72px; }
 section[hidden] { display: none; }
-h2 { font-size: 18px; margin: 28px 0 10px; }
-h2:first-child { margin-top: 0; }
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+h2 { font-size: 18px; margin: 40px 0 12px; }
+h3 { font-size: 15px; margin: 24px 0 8px; }
+section > :first-child { margin-top: 0; }
+.lead { color: var(--muted); font-size: 15px; max-width: 820px; margin: 0 0 28px; }
+.hint { color: var(--muted); max-width: 820px; margin: -6px 0 14px; }
+.cards.health-grid { grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); }
+.card.health { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; }
+.h-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.h-title { font-weight: 700; font-size: 15px; }
+.card.health p { margin: 0; color: var(--muted); flex: 1; }
+.card .t { font-weight: 600; }
+.pair { display: flex; gap: 18px; margin-top: 10px; }
+.pair small { display: block; color: var(--muted); font-size: 11px; margin-bottom: 3px; }
+.goto { align-self: flex-start; background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.goto:hover { text-decoration: underline; }
+.fix { display: flex; gap: 14px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.fix:last-child { border-bottom: 0; }
+.fix .pill { min-width: 68px; text-align: center; }
+.fix .grow { min-width: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
 .card .v { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .card .l { color: var(--muted); font-size: 12px; }
 .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
 .scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
 th { background: var(--surface-2); font-size: 12px; color: var(--muted); font-weight: 600; position: sticky; top: 0; cursor: pointer; user-select: none; }
 td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 tr:last-child td { border-bottom: 0; }
@@ -63,9 +80,9 @@ tr:last-child td { border-bottom: 0; }
 .score { display: inline-block; min-width: 36px; text-align: center; padding: 2px 6px; border-radius: 6px; font-weight: 700; font-variant-numeric: tabular-nums; }
 details { border-bottom: 1px solid var(--border); }
 details:last-child { border-bottom: 0; }
-summary { padding: 10px 12px; cursor: pointer; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+summary { padding: 12px 14px; cursor: pointer; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
 summary:hover { background: var(--surface-2); }
-.det { padding: 4px 14px 14px; }
+.det { padding: 4px 16px 18px; }
 code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
 pre { background: var(--surface-2); padding: 8px 10px; border-radius: 6px; white-space: pre-wrap; word-break: break-all; margin: 4px 0; }
 .muted { color: var(--muted); }
@@ -74,7 +91,7 @@ input[type=search] { width: 100%; max-width: 420px; padding: 8px 10px; border: 1
 ul.plain { margin: 6px 0; padding-left: 18px; }
 .bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--surface-2); margin-top: 8px; }
 .bar span { display: block; }
-.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
 .seg { display: flex; justify-content: center; gap: 4px; margin-bottom: 20px; }
 .seg button { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); padding: 10px 16px; font: inherit; cursor: pointer; }
 .seg button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: var(--surface-2); font-weight: 600; }
@@ -111,6 +128,15 @@ ul.plain { margin: 6px 0; padding-left: 18px; }
 .frame.desktop .base { display: block; position: relative; width: 220px; height: 64px; }
 .frame.desktop .base::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 58px; background: linear-gradient(90deg, #a1a1aa, #d4d4d8, #a1a1aa); clip-path: polygon(22% 0, 78% 0, 90% 100%, 10% 100%); }
 .frame.desktop .base::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; border-radius: 4px; background: linear-gradient(#d4d4d8, #9f9fa6); }
+.json { white-space: pre; word-break: normal; overflow: auto; max-height: 560px; margin: 0; padding: 12px 14px; line-height: 1.55; }
+.json.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.j-k { color: var(--accent); }
+.j-s { color: var(--good); }
+.j-n, .j-b { color: var(--serious); }
+.code-bar { display: flex; gap: 8px; justify-content: flex-end; margin: 4px 0 8px; }
+.btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn[aria-pressed="true"] { background: var(--surface-2); font-weight: 600; }
 .theme { float: right; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit; }
 @media (max-width: 600px) { .card .v { font-size: 22px; } th, td { padding: 6px; } }
 </style>
@@ -182,64 +208,147 @@ document.getElementById('sub').innerHTML = (D.partial ? '<span class="pill warni
 // ---- sections ----
 const S = {};
 
+// Plain-language names for the structure/SEO checks in audit.mjs: id -> [title, why it matters].
+const ISSUE = {
+  'title-missing': ['Page has no title', 'The title is the clickable headline in Google results and the text in the browser tab.'],
+  'title-length': ['Page title too short or too long', 'Aim for 15–65 characters so Google shows it in full.'],
+  'meta-description-missing': ['No meta description', 'Google often uses it as the summary under your link in search results.'],
+  'meta-description-length': ['Meta description too short or too long', 'Aim for 50–160 characters so it is not cut off in search results.'],
+  'html-lang-missing': ['Page language not set', 'Screen readers need it to pronounce the text correctly.'],
+  'viewport-missing': ['Not set up for mobile', 'Without a viewport tag the page shows zoomed out on phones.'],
+  'viewport-blocks-zoom': ['Zoom is disabled', 'People with low vision cannot pinch to zoom.'],
+  'h1-missing': ['No main heading (H1)', 'Each page should have one H1 that says what the page is about.'],
+  'h1-multiple': ['More than one main heading (H1)', 'Use one H1 per page and H2–H6 for sections.'],
+  'heading-skip': ['Heading levels skipped', 'For example an H2 followed by an H4. Screen reader users navigate by headings.'],
+  'canonical-missing': ['No canonical URL', 'Tells Google which address is the original when a page is reachable at several.'],
+  'noindex': ['Hidden from search engines', 'A "noindex" tag stops Google listing the page. Check this is intended.'],
+  'open-graph-incomplete': ['Incomplete social sharing preview', 'Links shared on Facebook, WhatsApp or LinkedIn show without a proper title or image.'],
+  'landmark-main-missing': ['No main content region', 'A <main> region lets keyboard and screen reader users jump straight to the content.'],
+  'skip-link-missing': ['No "Skip to content" link', 'Keyboard users must tab through the whole menu on every page.'],
+  'img-alt-missing': ['Images without alt text', 'Screen readers cannot describe these images.'],
+  'generic-link-text': ['Vague link text', 'Links like "read more" or "click here" make no sense on their own.'],
+  'new-tab-no-warning': ['Links open a new tab without warning', 'Unexpected new tabs disorient screen reader and keyboard users.'],
+  'duplicate-id': ['Duplicate element IDs', 'Can break form labels and assistive technology.'],
+  'tabindex-positive': ['Custom keyboard tab order', 'Makes keyboard navigation jump around the page unpredictably.'],
+  'autoplay-media': ['Media plays automatically', 'Autoplaying audio or video distracts and can drown out screen readers.'],
+  'reflow-320': ['Sideways scrolling on small screens', 'Content must fit a 320px-wide screen without horizontal scrolling (WCAG 1.4.10).'],
+  'img-no-dimensions': ['Images without width and height', 'The layout jumps while the page loads (Cumulative Layout Shift).'],
+  'thin-content': ['Very little text', 'Pages with under 150 words rarely rank well in search.'],
+  'structured-data-missing': ['No structured data', 'Schema.org data helps Google show rich results such as opening hours and reviews.'],
+  'json-ld-invalid': ['Invalid structured data (JSON-LD)', 'A JSON-LD block has a syntax error, so search engines ignore all of it.'],
+  'dom-size': ['Very large page', 'Over 1,500 elements slows the page down, especially on phones.'],
+};
+const issueTitle = (id) => ISSUE[id]?.[0] || id;
+const SECURITY = {
+  'strict-transport-security': ['HTTPS enforcement (HSTS)', 'Makes browsers always use the secure version of the site.'],
+  'content-security-policy': ['Content Security Policy', 'Limits which scripts can run, reducing the risk of malicious code injection.'],
+  'x-content-type-options': ['File type protection', 'Stops browsers guessing file types, which attackers can abuse.'],
+  'x-frame-options': ['Clickjacking protection', 'Stops other websites showing your pages inside a frame to trick visitors.'],
+  'referrer-policy': ['Referrer policy', 'Controls how much of your page address is shared with other websites.'],
+  'permissions-policy': ['Permissions policy', 'Restricts access to the camera, microphone, location and similar features.'],
+};
+const lead = (html) => '<p class="lead">' + html + '</p>';
+const hint = (html) => '<p class="hint">' + html + '</p>';
+const goto = (tab, label) => '<button type="button" class="goto" data-goto="' + esc(tab) + '">' + esc(label) + ' →</button>';
+const cap = (s) => s[0].toUpperCase() + s.slice(1);
+const missingHeaders = Object.entries(D.site.security).filter(([, v]) => !v).map(([k]) => SECURITY[k]?.[0] || k);
+const mixedPages = pages.filter((p) => p.mixedContent?.length).length;
+const brokenInternal = D.links.broken.filter((b) => b.internal).length;
+const htmlErrorPages = pages.filter((p) => p.htmlValidation?.errors).length;
+const VERDICT = { good: ['ok', 'Good'], fair: ['moderate', 'Needs work'], poor: ['critical', 'Poor'] };
+const fromScore = (s) => (s == null ? null : s >= 90 ? 'good' : s >= 50 ? 'fair' : 'poor');
+const health = (title, verdict, text, tab) => '<div class="card health"><div class="h-top"><span class="h-title">' + esc(title) + '</span>' +
+  (verdict ? pill(VERDICT[verdict][0], VERDICT[verdict][1]) : pill('minor', 'Not checked')) + '</div><p>' + text + '</p>' + (tab ? goto(tab, 'Details') : '') + '</div>';
+const lhCard = ([k, l]) => '<div class="card"><div class="t">' + esc(l) + '</div><div class="pair">' +
+  lhDevices.map((d) => '<span><small>' + cap(d) + '</small>' + score(avg(k, lhOf(d))) + '</span>').join('') + '</div></div>';
+
+// Everything worth fixing, across all checks, most urgent first.
+const RANK = [['critical', 'Urgent'], ['serious', 'High'], ['moderate', 'Medium'], ['minor', 'Low']];
+const fixes = [];
+const fix = (rank, title, detail, tab) => fixes.push({ rank, title, detail, tab });
+for (const r of axeList) fix({ critical: 0, serious: 1, moderate: 2 }[r.impact] ?? 3, r.help, r.nodes + ' elements on ' + r.pages.length + ' of ' + okPages.length + ' pages', 'Accessibility');
+if (brokenInternal) fix(0, 'Broken pages or links on your own site', brokenInternal + ' broken', 'Links');
+if (D.links.broken.length > brokenInternal) fix(2, 'Broken links to other websites', (D.links.broken.length - brokenInternal) + ' broken', 'Links');
+if (!D.site.httpsRedirect) fix(0, 'HTTP does not redirect to HTTPS', 'Visitors can end up on the insecure version of the site', null);
+if (mixedPages) fix(1, 'Insecure (HTTP) files on secure pages', 'on ' + mixedPages + ' pages', 'Pages');
+for (const r of structList) fix({ error: 0, warning: 2 }[r.severity] ?? 3, issueTitle(r.id), 'on ' + r.pages.length + ' of ' + pages.length + ' pages', 'SEO & Structure');
+for (const d of lhDevices) { const s = avg('performance', lhOf(d)); if (s != null && s < 90) fix(s < 50 ? 1 : 2, 'Slow on ' + d, 'Lighthouse speed score ' + s + ' out of 100', 'Lighthouse'); }
+if (htmlErrors) fix(3, 'HTML code errors', htmlErrors + ' errors on ' + htmlErrorPages + ' pages', 'HTML');
+if (missingHeaders.length) fix(2, 'Security headers missing', missingHeaders.join(', '), null);
+fixes.sort((a, b) => a.rank - b.rank);
+
 S.Overview = () => {
-  const total = IMPACTS.reduce((s, i) => s + impactNodes[i], 0) || 1;
-  const sec = D.site.security;
-  return '<div class="cards">' +
-    card(pages.length, 'Pages audited') +
-    card(axeList.length, 'Distinct axe rules failing') +
-    card(IMPACTS.reduce((s, i) => s + impactNodes[i], 0), 'Failing elements (axe)') +
-    card(pagesWithBlocking + ' / ' + okPages.length, 'Pages with critical/serious') +
-    card(D.links.broken.length, 'Broken links / pages') +
-    card(htmlErrors, 'HTML validation errors') +
-    (D.wave.enabled ? card(waveErr, 'WAVE errors + contrast') : '') +
-    (lh.length ? LH_CATS.map(([k, l]) => card(lhDevices.map((d) => score(avg(k, lhOf(d)))).join(' '), 'Lighthouse ' + l.toLowerCase() + ' (avg ' + lhDevices.join(' / ') + ')')).join('') : '') +
+  const total = IMPACTS.reduce((s, i) => s + impactNodes[i], 0);
+  const perf = lhDevices.map((d) => avg('performance', lhOf(d)));
+  const seoPages = pages.filter((p) => p.issues?.some((i) => i.severity !== 'notice')).length;
+  const seoTop = structList.filter((r) => r.severity !== 'notice').slice(0, 2).map((r) => issueTitle(r.id).toLowerCase() + ' (' + r.pages.length + ' pages)');
+  const perTab = {}; // at most 3 per area, so one noisy area doesn't hide the rest
+  const shown = fixes.filter((f) => (perTab[f.tab] = (perTab[f.tab] || 0) + 1) <= 3).slice(0, 8);
+  return lead('Automated check of <b>' + pages.length + ' pages</b> for accessibility, speed, search (SEO), broken links, security and code quality. Start with <b>Fix first</b>, then use the tabs above for page-by-page detail.') +
+    '<h2>Site health</h2><div class="cards health-grid">' +
+    health('Accessibility', !okPages.length ? null : impactNodes.critical || pagesWithBlocking > okPages.length / 2 ? 'poor' : total ? 'fair' : 'good',
+      !axeList.length ? 'No automated accessibility problems found.' : '<b>' + pagesWithBlocking + ' of ' + okPages.length + ' pages</b> have problems that can stop disabled visitors using them (critical or serious). ' + total + ' problems in total.', 'Accessibility') +
+    health('Speed', fromScore(perf.length ? Math.min(...perf.filter((s) => s != null)) : null),
+      lh.length ? 'Lighthouse speed score ' + lhDevices.map((d, i) => cap(d) + ' <b>' + perf[i] + '</b>').join(' · ') + ' out of 100. Google ranks on mobile speed.' : 'Lighthouse was not run.', lh.length ? 'Lighthouse' : null) +
+    health('Search (SEO) & structure', structList.some((r) => r.severity === 'error') ? 'poor' : seoPages ? 'fair' : 'good',
+      seoPages ? '<b>' + seoPages + ' of ' + pages.length + ' pages</b> need attention, for example ' + esc(seoTop.join(' and ')) + '.' : 'No search-engine problems found.', 'SEO & Structure') +
+    health('Links', brokenInternal ? 'poor' : D.links.broken.length ? 'fair' : 'good',
+      D.links.broken.length ? '<b>' + D.links.broken.length + ' broken</b>: ' + brokenInternal + ' on your own site, ' + (D.links.broken.length - brokenInternal) + ' to other websites. ' + D.links.checked + ' links checked.' : 'All ' + D.links.checked + ' links work.', 'Links') +
+    health('Security', !D.site.httpsRedirect || mixedPages ? 'poor' : missingHeaders.length ? 'fair' : 'good',
+      (D.site.httpsRedirect ? 'HTTPS is enforced. ' : '<b>HTTP does not redirect to HTTPS.</b> ') + (mixedPages ? '<b>' + mixedPages + ' pages</b> load insecure files. ' : '') +
+      (missingHeaders.length ? '<b>' + missingHeaders.length + ' of ' + Object.keys(D.site.security).length + '</b> recommended security headers missing (see Site-wide checks below).' : 'All recommended security headers set.'), null) +
+    health('Code quality', htmlErrors ? 'fair' : 'good',
+      htmlErrors ? '<b>' + htmlErrors + ' HTML errors</b> on ' + htmlErrorPages + ' pages. Browsers usually cope, but errors can confuse screen readers.' : 'No HTML errors found.', 'HTML') +
     '</div>' +
-    '<h2>axe-core failing elements by impact</h2><div class="panel" style="padding:14px">' +
-    IMPACTS.map((i) => pill(i, i + ': ' + impactNodes[i])).join(' ') +
-    '<div class="bar">' + IMPACTS.map((i) => '<span style="width:' + (impactNodes[i] / total * 100) + '%;background:var(--' + i + ')"></span>').join('') + '</div></div>' +
-    '<div class="two"><div><h2>Top accessibility problems</h2>' +
-    table(['Rule', 'Impact', 'Pages'], axeList.slice(0, 10).map((r) => [esc(r.help) + '<br><code class="muted">' + esc(r.id) + '</code>', pill(r.impact), r.pages.length]), [2]) +
-    '</div><div><h2>Top SEO / structure problems</h2>' +
-    table(['Issue', 'Severity', 'Pages'], structList.slice(0, 10).map((r) => [esc(r.id), pill(r.severity), r.pages.length]), [2]) + '</div></div>' +
-    '<h2>Site-level checks</h2>' +
-    table(['Check', 'Result'], [
-      ['robots.txt', D.discovery.robots.found ? pill('ok', 'found') : pill('warning', 'missing')],
-      ['XML sitemap', D.discovery.sitemaps.length ? pill('ok', D.discovery.sitemaps.length + ' file(s), ' + D.discovery.sitemapUrlCount + ' URLs') : pill('warning', 'not found')],
-      ['HTTP → HTTPS redirect', D.site.httpsRedirect ? pill('ok', 'yes') : pill('error', 'no')],
-      ['Real 404 for missing pages', D.site.soft404 ? pill('error', 'soft 404 (returns 200)') : pill('ok', 'status ' + D.site.notFoundStatus)],
-      ...Object.entries(sec).map(([k, v]) => [esc(k), v ? pill('ok', 'set') + ' <code class="muted">' + esc(v.slice(0, 120)) + '</code>' : pill('warning', 'missing')]),
-      ['Mixed content', pages.some((p) => p.mixedContent?.length) ? pill('error', pages.filter((p) => p.mixedContent?.length).length + ' pages') : pill('ok', 'none')],
-      ['Pages with JS console errors', pill(pages.some((p) => p.consoleErrors?.length) ? 'warning' : 'ok', pages.filter((p) => p.consoleErrors?.length).length)],
+    '<h2>Fix first</h2>' + hint('The most important problems across all checks, most urgent first.') +
+    (shown.length ? '<div class="panel">' + shown.map((f) => '<div class="fix">' + pill(RANK[f.rank][0], RANK[f.rank][1]) + '<div class="grow"><strong>' + esc(f.title) + '</strong><div class="muted">' + esc(f.detail) + '</div></div>' + (f.tab ? goto(f.tab, 'View') : '') + '</div>').join('') + '</div>' +
+      (fixes.length > shown.length ? '<p class="muted">+ ' + (fixes.length - shown.length) + ' more items in the tabs above.</p>' : '')
+      : '<div class="panel" style="padding:16px">Nothing to fix 🎉</div>') +
+    (lh.length ? '<h2>Lighthouse scores</h2>' + hint('Google Lighthouse, averaged across audited pages. 90–100 good · 50–89 needs work · 0–49 poor.') + '<div class="cards">' + LH_CATS.map(lhCard).join('') + '</div>' : '') +
+    '<h2>Accessibility problems by severity</h2>' + hint('Critical and serious problems can stop disabled visitors using a page. Moderate and minor ones make it harder.') +
+    '<div class="panel" style="padding:16px">' + IMPACTS.map((i) => pill(i, cap(i) + ': ' + impactNodes[i])).join(' ') +
+    '<div class="bar">' + IMPACTS.map((i) => '<span style="width:' + (impactNodes[i] / (total || 1) * 100) + '%;background:var(--' + i + ')"></span>').join('') + '</div></div>' +
+    '<h2>Site-wide checks</h2>' +
+    table(['Check', 'Result', 'What it means'], [
+      ['Search engine instructions (robots.txt)', D.discovery.robots.found ? pill('ok', 'Found') : pill('warning', 'Missing'), 'Tells search engines which parts of the site to crawl.'],
+      ['XML sitemap', D.discovery.sitemaps.length ? pill('ok', D.discovery.sitemapUrlCount + ' pages listed') : pill('warning', 'Not found'), 'Lists your pages so search engines can find them all.'],
+      ['HTTP redirects to HTTPS', D.site.httpsRedirect ? pill('ok', 'Yes') : pill('error', 'No'), 'Every visitor gets the secure version of the site.'],
+      ['Missing pages return "not found"', D.site.soft404 ? pill('error', 'No (returns 200)') : pill('ok', 'Yes (' + D.site.notFoundStatus + ')'), 'Stops search engines indexing error pages as real content.'],
+      ...Object.entries(D.site.security).map(([k, v]) => [esc(SECURITY[k]?.[0] || k) + '<br><code class="muted">' + esc(k) + '</code>', v ? pill('ok', 'Set') : pill('warning', 'Missing'), esc(SECURITY[k]?.[1] || '')]),
+      ['Insecure files on secure pages', mixedPages ? pill('error', mixedPages + ' pages') : pill('ok', 'None'), 'HTTP images or scripts on HTTPS pages trigger browser warnings.'],
+      ['JavaScript errors', pages.some((p) => p.consoleErrors?.length) ? pill('warning', pages.filter((p) => p.consoleErrors?.length).length + ' pages') : pill('ok', 'None'), 'Script errors can break menus, forms and booking flows.'],
     ]) +
-    '<h2>Still needs a human</h2><div class="panel" style="padding:4px 14px"><ul class="plain">' +
-    ['Keyboard-only navigation: every control reachable, visible focus, no traps', 'Screen reader pass (VoiceOver / NVDA) on key journeys and forms', 'Meaningful alt text quality (tools only detect missing alt)', 'Captions / transcripts for video and audio', 'Error messages and form validation announced to assistive tech', 'Content readable at 200% zoom and with text spacing overrides', 'Motion / animation respects prefers-reduced-motion', 'axe "needs review" items (' + okPages.reduce((s, p) => s + p.axe.incomplete.length, 0) + ' across pages) — see Pages tab']
+    '<h2>Checks a person still needs to do</h2>' + hint('Automated tools catch only part of accessibility problems. These need a quick manual pass.') +
+    '<div class="panel" style="padding:8px 16px"><ul class="plain">' +
+    ['Use the site with the keyboard only: every link and button reachable, focus always visible, never stuck', 'Try key journeys (booking, contact forms) with a screen reader such as VoiceOver or NVDA', 'Check image descriptions make sense (tools only spot missing ones)', 'Videos have captions; audio has a transcript', 'Form errors are clear and announced to screen readers', 'Text stays readable at 200% zoom', 'Animations respect the "reduce motion" setting', okPages.reduce((s, p) => s + p.axe.incomplete.length, 0) + ' items flagged "needs a manual check" (see the Pages tab)']
       .map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
 };
 const card = (v, l) => '<div class="card"><div class="v">' + v + '</div><div class="l">' + esc(l) + '</div></div>';
 
-S.Accessibility = () => '<h2>axe-core violations (' + D.options.axeTags.join(', ') + ')</h2><div class="panel">' +
+S.Accessibility = () => lead('Automated check against <b>WCAG 2.2 level AA</b>, the accessibility standard most regulations refer to (tool: axe-core). Each row is one problem; open it to see the affected pages, the exact elements and how to fix it. <b>Critical / serious</b> can stop disabled visitors using a page; <b>moderate / minor</b> make it harder.') +
+  '<h2>Problems found (' + axeList.length + ')</h2><div class="panel">' +
   (axeList.length ? axeList.map((r) => '<details><summary>' + pill(r.impact) + '<strong class="grow">' + esc(r.help) + '</strong><code class="muted">' + esc(r.id) + '</code><span class="muted">' + r.pages.length + ' pages · ' + r.nodes + ' elements</span></summary><div class="det">' +
     '<p>' + esc(r.description) + ' ' + link(r.helpUrl, 'How to fix ↗') + '</p><p class="muted">' + r.wcag.map(esc).join(' · ') + '</p>' +
     r.pages.slice(0, 50).map((p) => '<details><summary><span class="url grow">' + esc(p.url) + '</span><span class="muted">' + p.count + ' elements</span></summary><div class="det">' +
       p.nodes.map((n) => '<p><code>' + esc(n.target) + '</code></p><pre>' + esc(n.html) + '</pre><pre class="muted">' + esc(n.summary) + '</pre>').join('') + '</div></details>').join('') +
     (r.pages.length > 50 ? '<p class="muted">…and ' + (r.pages.length - 50) + ' more pages (see report.json)</p>' : '') +
     '</div></details>').join('') : '<p style="padding:14px">No axe violations found 🎉</p>') + '</div>' +
-  (D.wave.enabled ? waveSection() : '<h2>WAVE</h2><p class="muted">WAVE API not used (pass <code>--wave-key</code> or <code>WAVE_API_KEY</code>). Each page in the Pages tab links to its free WAVE web report.</p>');
+  (D.wave.enabled ? waveSection() : '<h2>WAVE (second opinion)</h2>' + hint('WAVE by WebAIM is a second accessibility checker. It was not run because it needs an API key (<code>--wave-key</code>). Each page in the Pages tab links to its free WAVE report instead.'));
 
 const waveSection = () => '<h2>WAVE (WebAIM)</h2>' + table(['Page', 'Errors', 'Contrast', 'Alerts', 'Features', 'ARIA', 'Top errors'], D.wave.results.map((w) => w.error
   ? ['<span class="url">' + esc(w.url) + '</span>', pill('error', w.error), '', '', '', '', '']
   : ['<span class="url">' + link(w.waveUrl || w.url, w.url) + '</span>', w.categories.error?.count ?? 0, w.categories.contrast?.count ?? 0, w.categories.alert?.count ?? 0, w.categories.feature?.count ?? 0, w.categories.aria?.count ?? 0,
     [...(w.categories.error?.items || []), ...(w.categories.contrast?.items || [])].map((i) => esc(i.description) + ' ×' + i.count).join('<br>')]), [1, 2, 3, 4, 5]);
 
-S.Pages = () => '<h2>All audited pages</h2><input type="search" id="pq" placeholder="Filter by URL…" aria-label="Filter pages by URL"><div class="panel" id="plist">' +
+S.Pages = () => lead('Every audited page with its accessibility problem counts, load time and size. Open a page for its full detail: search fields, heading outline, accessibility problems and HTML errors.') +
+  '<h2>All audited pages (' + pages.length + ')</h2><input type="search" id="pq" placeholder="Filter by URL…" aria-label="Filter pages by URL"><div class="panel" id="plist">' +
   pages.map((p) => {
     const c = Object.fromEntries(IMPACTS.map((i) => [i, 0]));
     (p.axe?.violations || []).forEach((v) => (c[v.impact] += v.count));
     const s = p.structure || {};
     return '<details data-url="' + esc(p.url) + '"><summary><span class="url grow">' + esc(p.url) + '</span>' +
-      (p.error ? pill('error', 'audit failed') : IMPACTS.filter((i) => c[i]).map((i) => pill(i, i[0].toUpperCase() + ': ' + c[i])).join(' ') || pill('ok', 'no axe violations')) +
-      '<span class="muted">' + (p.loadMs ?? '–') + ' ms · ' + (s.perf?.transferKB ?? '–') + ' KB</span></summary><div class="det">' + pageDetail(p) + '</div></details>';
+      (p.error ? pill('error', 'audit failed') : IMPACTS.filter((i) => c[i]).map((i) => pill(i, c[i] + ' ' + i)).join(' ') || pill('ok', 'no accessibility problems')) +
+      '<span class="muted">' + (p.loadMs != null ? (p.loadMs / 1000).toFixed(1) + ' s load' : '–') + ' · ' + (s.perf?.transferKB ?? '–') + ' KB</span></summary><div class="det">' + pageDetail(p) + '</div></details>';
   }).join('') + '</div>';
 
 function pageDetail(p) {
@@ -248,23 +357,24 @@ function pageDetail(p) {
   return '<p>' + link(p.url, 'Open page') + ' · ' + waveLink(p.url) + D.lighthouse.filter((l) => l.url === p.url && l.file).map((l) => ' · ' + link('lighthouse/' + l.file, 'Lighthouse ' + lhDevice(l))).join('') + ' · ' + (p.inSitemap ? 'in sitemap' : pill('notice', 'not in sitemap')) + '</p>' +
     '<div class="two"><div><h3>Document</h3>' + table(['Field', 'Value'], [
       ['Title', esc(s.title) + ' <span class="muted">(' + s.titleLength + ')</span>'], ['Meta description', esc(s.metaDescription || '—')],
-      ['lang', esc(s.lang ?? '—')], ['Canonical', esc(s.canonical ?? '—')], ['Robots meta', esc(s.robotsMeta ?? '—')],
-      ['Open Graph', esc(Object.entries(s.og).filter(([, v]) => v).map(([k]) => k).join(', ') || '—')], ['JSON-LD', esc(s.jsonLdTypes.join(', ') || '—')],
-      ['Landmarks', Object.entries(s.landmarks).map(([k, v]) => pill(v ? 'ok' : 'warning', k)).join(' ')],
-      ['Images', s.images + ' (' + s.imagesMissingAlt + ' no alt, ' + s.imagesEmptyAlt + ' decorative)'], ['Words / DOM nodes', s.wordCount + ' / ' + s.domNodes],
-      ['TTFB / DCL / load', s.perf.ttfb + ' / ' + s.perf.domContentLoaded + ' / ' + s.perf.load + ' ms'], ['Requests / transfer', s.perf.requests + ' / ' + s.perf.transferKB + ' KB'],
+      ['Language', esc(s.lang ?? '—')], ['Canonical', esc(s.canonical ?? '—')], ['Robots meta', esc(s.robotsMeta ?? '—')],
+      ['Social sharing (Open Graph)', esc(Object.entries(s.og).filter(([, v]) => v).map(([k]) => k).join(', ') || '—')], ['Structured data (JSON-LD)', esc(s.jsonLdTypes.join(', ') || '—')],
+      ['Page regions (landmarks)', Object.entries(s.landmarks).map(([k, v]) => pill(v ? 'ok' : 'warning', k)).join(' ')],
+      ['Images', s.images + ' (' + s.imagesMissingAlt + ' no alt, ' + s.imagesEmptyAlt + ' decorative)'], ['Words / page elements', s.wordCount + ' / ' + s.domNodes],
+      ['Server response / ready / fully loaded', s.perf.ttfb + ' / ' + s.perf.domContentLoaded + ' / ' + s.perf.load + ' ms'], ['Files / download size', s.perf.requests + ' / ' + s.perf.transferKB + ' KB'],
     ]) + '</div><div><h3>Heading outline</h3><div class="panel" style="padding:8px 12px;max-height:340px;overflow:auto">' +
     (s.headings.map((h) => '<div style="padding-left:' + (h.level - 1) * 14 + 'px"><code class="muted">h' + h.level + '</code> ' + esc(h.text) + '</div>').join('') || '<span class="muted">No headings</span>') + '</div></div></div>' +
-    '<h3>Structure / SEO findings</h3>' + table(['Severity', 'Issue'], (p.issues || []).map((i) => [pill(i.severity), esc(i.msg)])) +
-    '<h3>axe violations</h3>' + table(['Impact', 'Rule', 'Elements'], p.axe.violations.map((v) => [pill(v.impact), esc(v.help) + ' ' + link(v.helpUrl, '↗') + '<br>' + v.nodes.slice(0, 3).map((n) => '<code class="muted">' + esc(n.target) + '</code>').join('<br>'), v.count]), [2]) +
-    '<h3>axe needs review</h3>' + table(['Impact', 'Rule', 'Elements'], p.axe.incomplete.map((v) => [pill(v.impact || 'minor'), esc(v.help) + ' ' + link(v.helpUrl, '↗'), v.count]), [2]) +
-    '<h3>HTML validation</h3>' + table(['Severity', 'Rule', 'Line', 'Message'], p.htmlValidation.messages.map((m) => [pill(m.severity), link('https://html-validate.org/rules/' + m.rule + '.html', m.rule), m.line, esc(m.message)])) +
-    (p.consoleErrors.length ? '<h3>Console errors</h3>' + p.consoleErrors.map((e) => '<pre>' + esc(e) + '</pre>').join('') : '') +
+    '<h3>Search (SEO) & structure</h3>' + table(['Severity', 'Issue'], (p.issues || []).map((i) => [pill(i.severity), '<strong>' + esc(issueTitle(i.id)) + '</strong> <span class="muted">· ' + esc(i.msg) + '</span>'])) +
+    '<h3>Accessibility problems</h3>' + table(['Impact', 'Rule', 'Elements'], p.axe.violations.map((v) => [pill(v.impact), esc(v.help) + ' ' + link(v.helpUrl, '↗') + '<br>' + v.nodes.slice(0, 3).map((n) => '<code class="muted">' + esc(n.target) + '</code>').join('<br>'), v.count]), [2]) +
+    '<h3>Accessibility: needs a manual check</h3>' + table(['Impact', 'Rule', 'Elements'], p.axe.incomplete.map((v) => [pill(v.impact || 'minor'), esc(v.help) + ' ' + link(v.helpUrl, '↗'), v.count]), [2]) +
+    '<h3>HTML errors</h3>' + table(['Severity', 'Rule', 'Line', 'Message'], p.htmlValidation.messages.map((m) => [pill(m.severity), link('https://html-validate.org/rules/' + m.rule + '.html', m.rule), m.line, esc(m.message)])) +
+    (p.consoleErrors.length ? '<h3>JavaScript errors</h3>' + p.consoleErrors.map((e) => '<pre>' + esc(e) + '</pre>').join('') : '') +
     (p.failedRequests.length ? '<h3>Failed requests</h3>' + table(['Status', 'URL'], p.failedRequests.map((r) => [esc(r.status || r.error), '<span class="url">' + esc(r.url) + '</span>'])) : '') +
-    (p.mixedContent.length ? '<h3>Mixed content</h3>' + p.mixedContent.map((u) => '<pre>' + esc(u) + '</pre>').join('') : '');
+    (p.mixedContent.length ? '<h3>Insecure (HTTP) files</h3>' + p.mixedContent.map((u) => '<pre>' + esc(u) + '</pre>').join('') : '');
 }
 
 S.Lighthouse = () => !D.lighthouse.length ? '<p class="muted">Lighthouse not run (use <code>--lighthouse N</code>).</p>' :
+  lead('Google Lighthouse lab test of each page, on a simulated mid-range phone (<b>Mobile</b>) and a <b>Desktop</b>. Scores are out of 100: <b>90+</b> good, <b>50–89</b> needs work, <b>under 50</b> poor. <b>LCP</b> is how long until the main content shows (aim under 2.5 s), <b>TBT</b> how long scripts freeze the page (aim under 200 ms), <b>CLS</b> how much the layout jumps (aim under 0.1).') +
   '<div class="seg" role="tablist" aria-label="Form factor">' + lhDevices.map((d, i) => '<button type="button" role="tab" data-device="' + d + '" aria-selected="' + (i === 0) + '">' + DEVICE_ICON[d] + d[0].toUpperCase() + d.slice(1) + '</button>').join('') + '</div>' +
   lhDevices.map((d, i) => '<div data-device-panel="' + d + '"' + (i ? ' hidden' : '') + '>' + lhPanel(d) + '</div>').join('');
 const DEVICE_ICON = {
@@ -272,15 +382,15 @@ const DEVICE_ICON = {
   desktop: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M1 20h22"/></svg>',
 };
 const lhPanel = (d) => '<div class="cards">' + LH_CATS.map(([k, l]) => card(score(avg(k, lhOf(d))), l + ' (avg)')).join('') + '</div>' +
-  '<h2>Lighthouse (' + d + ') — ' + lhOf(d).length + ' pages</h2>' +
-  table(['Page', 'Perf', 'A11y', 'Best pr.', 'SEO', 'Agentic', 'LCP', 'TBT', 'CLS', 'Report'], D.lighthouse.filter((l) => lhDevice(l) === d).map((l) => l.scores
+  '<h2>Scores per page (' + d + ', ' + lhOf(d).length + ' pages)</h2>' +
+  table(['Page', 'Performance', 'Accessibility', 'Best practices', 'SEO', 'Agentic', 'LCP', 'TBT', 'CLS', 'Report'], D.lighthouse.filter((l) => lhDevice(l) === d).map((l) => l.scores
     ? ['<span class="url">' + esc(l.url) + '</span>' + (l.runtimeError ? '<br>' + pill('error', l.runtimeError) : ''), score(l.scores.performance), score(l.scores.accessibility), score(l.scores['best-practices']), score(l.scores.seo), score(l.scores['agentic-browsing']), esc(l.metrics.LCP), esc(l.metrics.TBT), esc(l.metrics.CLS), link('lighthouse/' + l.file, 'open')]
     : ['<span class="url">' + esc(l.url) + '</span>', pill('error', l.error), '', '', '', '', '', '', '', '']), [1, 2, 3, 4, 5]) +
-  '<h2>Most common failing audits</h2>' + table(['Audit', 'Category', 'Pages', 'Example'], failingAudits(lhOf(d)).slice(0, 40).map((f) => [esc(f.title) + '<br><code class="muted">' + esc(f.id) + '</code>', esc(f.category), f.pages, esc(f.displayValue)]), [2]);
+  '<h2>Most common problems</h2>' + hint('Lighthouse checks that scored below 90, by number of pages affected.') + table(['Problem', 'Category', 'Pages', 'Example'], failingAudits(lhOf(d)).slice(0, 40).map((f) => [esc(f.title) + '<br><code class="muted">' + esc(f.id) + '</code>', esc(Object.fromEntries(LH_CATS)[f.category] || f.category), f.pages, esc(f.displayValue)]), [2]);
 
 S.Screenshots = () => !D.screenshots?.pages.length ? '<p class="muted">Screenshots not taken (use <code>--screenshots N</code>).</p>' :
-  '<h2>Screenshots — ' + D.screenshots.pages.length + ' pages × ' + D.screenshots.screens.map((s) => s.label + ' ' + s.width + '×' + s.height).join(' · ') + '</h2>' +
-  '<p class="muted">Open a page to compare it at each size. Scroll inside a screen to see the rest of the page.</p>' +
+  lead('Each page captured at ' + D.screenshots.screens.map((s) => '<b>' + s.label + '</b> ' + s.width + '×' + s.height).join(' · ') + '. Open a page to compare the sizes side by side and scroll inside a screen to see the rest of it. Switch to <b>Live</b> to use the real site in each frame.') +
+  '<h2>Pages (' + D.screenshots.pages.length + ')</h2>' +
   '<input type="search" placeholder="Filter by URL…" aria-label="Filter screenshots by URL"><div class="panel">' +
   D.screenshots.pages.map((p, i) => {
     const errs = p.shots.filter((s) => s.error).length;
@@ -318,38 +428,119 @@ const frames = (p, live) => D.screenshots.screens.map((s) => {
 const fitFrames = (root) => { for (const f of root.querySelectorAll('.screen iframe')) f.style.transform = 'scale(' + f.parentElement.clientWidth / f.dataset.w + ')'; };
 addEventListener('resize', () => fitFrames(document));
 
-S['SEO & Structure'] = () => '<h2>Findings by type</h2><div class="panel">' +
-  structList.map((r) => '<details><summary>' + pill(r.severity) + '<strong class="grow">' + esc(r.id) + '</strong><span class="muted">' + r.pages.length + ' pages</span></summary><div class="det">' +
-    table(['Page', 'Detail'], r.pages.map((p) => ['<span class="url">' + esc(p.url) + '</span>', esc(p.msg)])) + '</div></details>').join('') + '</div>' +
-  '<h2>Titles & descriptions</h2>' + table(['Page', 'Title', 'Meta description', 'H1'], pages.filter((p) => p.structure).map((p) => ['<span class="url">' + esc(p.url) + '</span>', esc(p.structure.title), esc(p.structure.metaDescription ?? '—'), p.structure.h1Count]), [3]) +
+S['SEO & Structure'] = () => lead('How search engines and assistive technology read each page: titles, descriptions, headings, page regions and sharing previews. <b>Error</b> fix now · <b>Warning</b> should fix · <b>Notice</b> nice to have.') +
+  '<h2>Findings (' + structList.length + ')</h2><div class="panel">' +
+  structList.map((r) => '<details><summary>' + pill(r.severity) + '<strong class="grow">' + esc(issueTitle(r.id)) + '</strong><span class="muted">' + r.pages.length + ' pages</span></summary><div class="det">' +
+    '<p>' + esc(ISSUE[r.id]?.[1] || '') + ' <code class="muted">' + esc(r.id) + '</code></p>' + table(['Page', 'Detail'], r.pages.map((p) => ['<span class="url">' + esc(p.url) + '</span>', esc(p.msg)])) + '</div></details>').join('') + '</div>' +
+  '<h2>Titles & descriptions</h2>' + hint('What Google shows for each page in search results.') + table(['Page', 'Page title', 'Meta description', 'H1s'], pages.filter((p) => p.structure).map((p) => ['<span class="url">' + esc(p.url) + '</span>', esc(p.structure.title) || pill('error', 'missing'), p.structure.metaDescription ? esc(p.structure.metaDescription) : pill('warning', 'missing'), p.structure.h1Count === 1 ? 1 : pill('warning', p.structure.h1Count)]), [3]) +
   dupes('Duplicate titles', (p) => p.structure?.title) + dupes('Duplicate meta descriptions', (p) => p.structure?.metaDescription);
 
 function dupes(title, key) {
   const m = {};
   for (const p of pages) { const k = key(p); if (k) (m[k] ||= []).push(p.url); }
   const rows = Object.entries(m).filter(([, v]) => v.length > 1).map(([k, v]) => [esc(k), v.length, v.map((u) => '<div class="url">' + esc(u) + '</div>').join('')]);
-  return '<h2>' + esc(title) + '</h2>' + table(['Value', 'Pages', 'URLs'], rows, [1]);
+  return '<h2>' + esc(title) + '</h2>' + hint('Each page should have its own, so search engines can tell them apart.') + table(['Text', 'Pages', 'Used on'], rows, [1]);
 }
 
-S.HTML = () => '<h2>HTML validation (html-validate: standard + document + WCAG rules) — ' + htmlErrors + ' errors</h2>' +
-  table(['Rule', 'Severity', 'Pages', 'Occurrences', 'Example'], htmlList.map((r) => [link('https://html-validate.org/rules/' + r.rule + '.html', r.rule), pill(r.severity), r.pages.size, r.count, esc(r.example)]), [2, 3]) +
-  '<p class="muted">Occurrence counts capped at 60 messages per page; see report.json for per-page detail.</p>';
+// ---- Schema (JSON-LD), same rules as the schema-preview DevTools panel ----
+const NL = String.fromCharCode(10);
+const ldLabel = (v) => (typeof v === 'string' ? v : Array.isArray(v) ? v.map(ldLabel).filter(Boolean).join(', ') : '');
+// arrays and @graph become separate items; @graph nodes inherit the parent @context
+const ldNodes = (v, label) => {
+  if (Array.isArray(v)) return v.flatMap((x, i) => ldNodes(x, label + ' · item ' + (i + 1)));
+  if (!v || typeof v !== 'object' || !Array.isArray(v['@graph'])) return [{ value: v, label }];
+  const nodes = v['@graph'].map((n, i) => ({ value: n && typeof n === 'object' && v['@context'] && !n['@context'] ? { '@context': v['@context'], ...n } : n, label: label + ' · @graph ' + (i + 1) }));
+  return v['@type'] ? [{ value: v, label }, ...nodes] : nodes;
+};
+const stable = (v) => (Array.isArray(v) ? '[' + v.map(stable).join(',') + ']'
+  : v && typeof v === 'object' ? '{' + Object.keys(v).sort().map((k) => JSON.stringify(k) + ':' + stable(v[k])).join(',') + '}' : JSON.stringify(v));
+// one entry per distinct schema item on the page; exact repeats are counted, not listed
+const ldItems = (p) => {
+  const seen = new Map();
+  (p.structure?.jsonLdRaw || []).forEach((raw, s) => {
+    let nodes;
+    try { nodes = ldNodes(JSON.parse(raw), 'Script ' + (s + 1)); } catch (e) { nodes = [{ error: e.message, raw, label: 'Script ' + (s + 1) }]; }
+    for (const n of nodes) {
+      const key = n.error ? 'invalid:' + n.raw : stable(n.value);
+      if (seen.has(key)) seen.get(key).dupes++;
+      else seen.set(key, { ...n, dupes: 0, text: n.error ? n.raw : JSON.stringify(n.value, null, 2) });
+    }
+  });
+  return [...seen.values()];
+};
+const ldType = (it) => (it.error ? 'Unreadable block' : ldLabel(it.value?.['@type']) || '(no @type)');
+// coloured JSON built from the parsed value (same text as JSON.stringify(v, null, 2), so Copy can use textContent)
+const hl = (v, ind) => {
+  const pad = '  '.repeat(ind);
+  if (Array.isArray(v)) return v.length ? '[' + NL + v.map((x) => pad + '  ' + hl(x, ind + 1)).join(',' + NL) + NL + pad + ']' : '[]';
+  if (v && typeof v === 'object') {
+    const ks = Object.keys(v);
+    return ks.length ? '{' + NL + ks.map((k) => pad + '  <span class="j-k">' + esc(JSON.stringify(k)) + '</span>: ' + hl(v[k], ind + 1)).join(',' + NL) + NL + pad + '}' : '{}';
+  }
+  return '<span class="' + (typeof v === 'string' ? 'j-s' : typeof v === 'number' ? 'j-n' : 'j-b') + '">' + esc(JSON.stringify(v)) + '</span>';
+};
+// navigator.clipboard only exists on https / localhost; plain-http hosts (e.g. a LAN IP) need the old execCommand path
+const copyText = async (text) => {
+  try { await navigator.clipboard.writeText(text); return true; } catch {}
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.readOnly = true; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  const ok = document.execCommand('copy');
+  ta.remove();
+  return ok;
+};
+const kb = (s) => (new Blob([s]).size / 1024).toFixed(1) + ' KB';
 
-S.Links = () => '<h2>Broken links & pages (' + D.links.broken.length + ')</h2>' +
-  table(['URL', 'Status', 'Type', 'Found on'], D.links.broken.map((b) => ['<span class="url">' + esc(b.url) + '</span>', pill('error', b.status || b.error || 'error'), b.internal ? 'internal' : 'external', b.foundOn.slice(0, 5).map((u) => '<div class="url muted">' + esc(u) + '</div>').join('')])) +
-  '<p class="muted">' + D.links.checked + ' URLs checked. Some sites (LinkedIn, Instagram…) block automated checks — verify 403/429/999 manually.</p>';
+S.Schema = () => {
+  if (!pages.some((p) => p.structure?.jsonLdRaw)) return lead('This report was made before schema capture was added. Run the audit again to see the JSON-LD of each page.');
+  const withLd = pages.filter((p) => p.structure?.jsonLdRaw?.length).length;
+  return lead('JSON-LD structured data (schema.org) tells search engines what a page is about, such as a pharmacy with its opening hours or a list of FAQs, so Google can show rich results. Open a page to see its schema items, then open an item to see its JSON. The test links check the live page with Google and schema.org.') +
+    '<h2>Pages (' + withLd + ' of ' + pages.length + ' have JSON-LD)</h2><input type="search" placeholder="Filter by URL…" aria-label="Filter schema pages by URL"><div class="panel">' +
+    pages.map((p, i) => {
+      const items = ldItems(p);
+      const types = [...new Set(items.filter((x) => !x.error).map(ldType))];
+      const bad = items.filter((x) => x.error).length;
+      return '<details data-url="' + esc(p.url) + '" data-ld="' + i + '"><summary><span class="url grow">' + esc(p.url) + '</span>' +
+        (bad ? pill('error', bad + ' invalid') + ' ' : '') +
+        (types.length ? types.slice(0, 4).map((t) => pill('notice', t)).join(' ') + (types.length > 4 ? ' <span class="muted">+' + (types.length - 4) + ' more</span>' : '') : bad ? '' : '<span class="muted">No schema</span>') +
+        '</summary><div class="det"></div></details>';
+    }).join('') + '</div>';
+};
+const ldPage = (p) => {
+  const items = ldItems(p);
+  const enc = encodeURIComponent(p.url);
+  return '<p>' + link('https://search.google.com/test/rich-results?url=' + enc, 'Google Rich Results Test ↗') + ' · ' + link('https://validator.schema.org/#url=' + enc, 'Schema.org validator ↗') + '</p>' +
+    (items.length ? '<div class="panel">' + items.map((it) => '<details class="ld"><summary>' + (it.error ? pill('error', 'invalid JSON') : '') +
+      '<strong class="grow">' + esc(ldType(it)) + (typeof it.value?.name === 'string' ? ' <span class="muted">· ' + esc(it.value.name) + '</span>' : '') + '</strong>' +
+      '<span class="muted">' + esc(it.label) + ' · ' + kb(it.text) + ' · ' + it.text.split(NL).length + (it.text.split(NL).length === 1 ? ' line' : ' lines') + (it.dupes ? ' · +' + it.dupes + ' duplicate' + (it.dupes > 1 ? 's' : '') : '') + '</span></summary><div class="det">' +
+      (it.error ? '<p>' + pill('error', it.error) + '</p>' : '') +
+      '<div class="code-bar"><button type="button" class="btn" data-ld-wrap aria-pressed="false">Wrap code</button><button type="button" class="btn" data-ld-copy>Copy JSON</button></div>' +
+      '<pre class="json">' + (it.error ? esc(it.text) : hl(it.value, 0)) + '</pre></div></details>').join('') + '</div>'
+      : '<p class="muted">No JSON-LD on this page.</p>');
+};
+
+S.HTML = () => lead('Checks the source code of each page against the HTML standard. Browsers usually cope with errors, but they can confuse screen readers and make pages look different between browsers. <b>Errors</b> are worth fixing; <b>warnings</b> are lower priority. Click a rule name for an explanation.') +
+  '<h2>HTML code problems (' + htmlErrors + ' errors)</h2>' +
+  table(['Rule', 'Severity', 'Pages', 'Times', 'Example'], htmlList.map((r) => [link('https://html-validate.org/rules/' + r.rule + '.html', r.rule), pill(r.severity), r.pages.size, r.count, esc(r.example)]), [2, 3]) +
+  hint('Counts stop at 60 messages per page; report.json has the full per-page list.');
+
+S.Links = () => lead('Every link on the audited pages was opened to check it still works. <b>404</b> means the page no longer exists; other codes or errors mean the site refused or failed to load.') +
+  '<h2>Broken links (' + D.links.broken.length + ')</h2>' +
+  table(['Link', 'Status', 'Where it goes', 'Found on'], D.links.broken.map((b) => ['<span class="url">' + esc(b.url) + '</span>', pill('error', b.status || b.error || 'error'), b.internal ? 'Your site' : 'Other website', b.foundOn.slice(0, 5).map((u) => '<div class="url muted">' + esc(u) + '</div>').join('')])) +
+  hint(D.links.checked + ' links checked. Some sites (Facebook, LinkedIn, Instagram) block automated checks, so check 400, 403, 429 and 999 results by hand.');
 
 S.Discovery = () => {
   const d = D.discovery;
-  return '<div class="cards">' + card(d.fetched.length, 'URLs fetched') + card(d.htmlPages.length, 'HTML pages') + card(d.sitemapUrlCount, 'Sitemap URLs') +
-    card(d.notInSitemap.length, 'Pages missing from sitemap') + card(d.orphans.length, 'Orphans (sitemap only, no inbound link)') + card(d.skipped.robots.length, 'Skipped by robots.txt') + '</div>' +
+  return lead('How the audit found the pages: from the sitemap, robots.txt and by following links from the homepage.') +
+    '<div class="cards">' + card(d.fetched.length, 'Addresses visited') + card(d.htmlPages.length, 'Web pages audited') + card(d.sitemapUrlCount, 'Pages in sitemap') +
+    card(d.notInSitemap.length, 'Pages missing from sitemap') + card(d.orphans.length, 'Orphan pages (nothing links to them)') + card(d.skipped.robots.length, 'Blocked by robots.txt') + '</div>' +
     (d.pendingNotCrawled ? '<p>' + pill('warning', 'Crawl hit --max-pages; ' + d.pendingNotCrawled + ' queued URLs not visited') + '</p>' : '') +
-    '<h2>Sitemaps</h2>' + table(['Sitemap', 'Type', 'Entries'], d.sitemaps.map((s) => [link(s.url), s.type, s.entries]), [2]) +
+    '<h2>Sitemaps</h2>' + table(['Sitemap', 'Type', 'Entries'], d.sitemaps.map((s) => [link(s.url), s.type === 'index' ? 'Sitemap index' : 'Page list', s.entries]), [2]) +
     '<h2>robots.txt</h2><pre>' + esc(d.robots.raw || '(none)') + '</pre>' +
-    list('Orphan pages', d.orphans) + list('Pages not in sitemap', d.notInSitemap) + list('Skipped by robots.txt', d.skipped.robots) +
-    '<h2>All fetched URLs</h2>' + table(['URL', 'Status', 'Source', 'Redirects to', 'Out links'], d.fetched.map((f) => ['<span class="url">' + esc(f.url) + '</span>', pill(f.status && f.status < 400 ? 'ok' : 'error', f.status || f.error || 'ERR'), esc(f.source), f.finalUrl !== f.url ? '<span class="url muted">' + esc(f.finalUrl) + '</span>' : '', f.outLinks]), [4]);
+    list('Orphan pages', d.orphans, 'In the sitemap, but no page links to them, so visitors cannot find them.') + list('Pages not in sitemap', d.notInSitemap, 'Add these to the sitemap so search engines find them reliably.') + list('Blocked by robots.txt', d.skipped.robots, 'Not audited because robots.txt asks crawlers to stay out.') +
+    '<h2>Every address visited</h2>' + table(['Address', 'Status', 'Found via', 'Redirects to', 'Links on page'], d.fetched.map((f) => ['<span class="url">' + esc(f.url) + '</span>', pill(f.status && f.status < 400 ? 'ok' : 'error', f.status || f.error || 'ERR'), esc({ start: 'Homepage', sitemap: 'Sitemap', crawl: 'Link on another page' }[f.source] || f.source), f.finalUrl !== f.url ? '<span class="url muted">' + esc(f.finalUrl) + '</span>' : '', f.outLinks]), [4]);
 };
-const list = (t, arr) => '<h2>' + esc(t) + ' (' + arr.length + ')</h2>' + (arr.length ? '<div class="panel" style="padding:8px 14px;max-height:300px;overflow:auto">' + arr.map((u) => '<div class="url">' + esc(u) + '</div>').join('') + '</div>' : '<p class="muted">None</p>');
+const list = (t, arr, why) => '<h2>' + esc(t) + ' (' + arr.length + ')</h2>' + hint(esc(why)) + (arr.length ? '<div class="panel" style="padding:8px 14px;max-height:300px;overflow:auto">' + arr.map((u) => '<div class="url">' + esc(u) + '</div>').join('') + '</div>' : '<p class="muted">None</p>');
 
 // ---- tabs ----
 const tabs = document.getElementById('tabs');
@@ -372,6 +563,27 @@ function show(name) {
       const d = e.target;
       if (d.open && d.dataset.shot && !d.dataset.done) { d.dataset.done = 1; d.querySelector('.det').innerHTML = shotView(d.dataset.shot, false); }
     }, true);
+    if (name === 'Schema') sec.addEventListener('toggle', (e) => {
+      const d = e.target;
+      if (d.open && d.dataset.ld && !d.dataset.done) { d.dataset.done = 1; d.querySelector('.det').innerHTML = ldPage(pages[d.dataset.ld]); }
+    }, true);
+    if (name === 'Schema') sec.addEventListener('click', (e) => {
+      const wrap = e.target.closest('[data-ld-wrap]');
+      const copy = e.target.closest('[data-ld-copy]');
+      const pre = (wrap || copy)?.closest('.det').querySelector('pre.json');
+      if (wrap) {
+        const on = pre.classList.toggle('wrap');
+        wrap.setAttribute('aria-pressed', on);
+        wrap.textContent = on ? 'No wrap' : 'Wrap code';
+      }
+      if (copy) {
+        copyText(pre.textContent).then((ok) => {
+          if (!ok) getSelection().selectAllChildren(pre);
+          copy.textContent = ok ? 'Copied ✓' : 'Selected, press Ctrl/Cmd+C';
+          setTimeout(() => { copy.textContent = 'Copy JSON'; }, 2000);
+        });
+      }
+    });
     if (name === 'Screenshots') sec.addEventListener('click', (e) => {
       const b = e.target.closest('[data-view]');
       if (!b || b.disabled || b.getAttribute('aria-selected') === 'true') return;
@@ -396,6 +608,10 @@ for (const name of Object.keys(S)) {
 }
 let saved; try { saved = localStorage.getItem('tab'); } catch {}
 show(S[saved] ? saved : 'Overview');
+document.addEventListener('click', (e) => {
+  const g = e.target.closest('[data-goto]');
+  if (g) { show(g.dataset.goto); scrollTo({ top: 0 }); }
+});
 document.getElementById('theme').onclick = () => {
   const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
   document.documentElement.dataset.theme = dark ? 'light' : 'dark';

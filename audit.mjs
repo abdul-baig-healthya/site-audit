@@ -330,6 +330,7 @@ function extractStructure() {
     twitterCard: meta('twitter:card'),
     hreflang: $$('link[rel="alternate"][hreflang]').map((l) => l.hreflang),
     jsonLdTypes: [...new Set(jsonLd)],
+    jsonLdRaw: $$('script[type="application/ld+json"]').map((s) => s.textContent.trim().slice(0, 50000)), // full blocks for the Schema tab
     h1Count: headings.filter((h) => h.level === 1).length,
     headings: headings.slice(0, 80),
     headingSkips: skips,
@@ -394,6 +395,7 @@ function structureIssues(s) {
   if (s.imagesNoDimensions) add('notice', 'img-no-dimensions', `${s.imagesNoDimensions} images without width/height (CLS risk)`);
   if (s.wordCount < 150) add('notice', 'thin-content', `Only ${s.wordCount} words`);
   if (!s.jsonLdTypes.length) add('notice', 'structured-data-missing', 'No JSON-LD structured data');
+  if (s.jsonLdTypes.includes('(invalid JSON-LD)')) add('error', 'json-ld-invalid', 'A JSON-LD block is not valid JSON, so search engines ignore it');
   if (s.domNodes > 1500) add('notice', 'dom-size', `${s.domNodes} DOM nodes`);
   return out;
 }
