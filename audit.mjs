@@ -430,7 +430,7 @@ async function runLighthouse(urls, dir) {
       for (let attempt = 1; attempt <= 2; attempt++) try {
         const r = await lighthouse(url, {
           port: chrome.port, output: ['html', 'json'], logLevel: 'error',
-          onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
+          onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo', 'agentic-browsing'],
         }, opt.device === 'desktop' ? desktopConfig : undefined);
         const file = `lh-${String(i + 1).padStart(3, '0')}.html`;
         await writeFile(path.join(dir, file), r.report[0]);

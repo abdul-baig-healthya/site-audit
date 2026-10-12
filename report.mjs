@@ -151,7 +151,7 @@ S.Overview = () => {
     card(D.links.broken.length, 'Broken links / pages') +
     card(htmlErrors, 'HTML validation errors') +
     (D.wave.enabled ? card(waveErr, 'WAVE errors + contrast') : '') +
-    (lh.length ? [['performance', 'Lighthouse perf'], ['accessibility', 'Lighthouse a11y'], ['best-practices', 'Lighthouse best pr.'], ['seo', 'Lighthouse SEO']].map(([k, l]) => card(score(avg(k)), l + ' (avg)')).join('') : '') +
+    (lh.length ? [['performance', 'Lighthouse perf'], ['accessibility', 'Lighthouse a11y'], ['best-practices', 'Lighthouse best pr.'], ['seo', 'Lighthouse SEO'], ['agentic-browsing', 'Lighthouse agentic']].map(([k, l]) => card(score(avg(k)), l + ' (avg)')).join('') : '') +
     '</div>' +
     '<h2>axe-core failing elements by impact</h2><div class="panel" style="padding:14px">' +
     IMPACTS.map((i) => pill(i, i + ': ' + impactNodes[i])).join(' ') +
@@ -225,9 +225,9 @@ function pageDetail(p) {
 
 S.Lighthouse = () => !D.lighthouse.length ? '<p class="muted">Lighthouse not run (use <code>--lighthouse N</code>).</p>' :
   '<h2>Lighthouse (' + esc(D.options.device) + ') — ' + lh.length + ' pages</h2>' +
-  table(['Page', 'Perf', 'A11y', 'Best pr.', 'SEO', 'LCP', 'TBT', 'CLS', 'Report'], D.lighthouse.map((l) => l.scores
-    ? ['<span class="url">' + esc(l.url) + '</span>' + (l.runtimeError ? '<br>' + pill('error', l.runtimeError) : ''), score(l.scores.performance), score(l.scores.accessibility), score(l.scores['best-practices']), score(l.scores.seo), esc(l.metrics.LCP), esc(l.metrics.TBT), esc(l.metrics.CLS), link('lighthouse/' + l.file, 'open')]
-    : ['<span class="url">' + esc(l.url) + '</span>', pill('error', l.error), '', '', '', '', '', '', '']), [1, 2, 3, 4]) +
+  table(['Page', 'Perf', 'A11y', 'Best pr.', 'SEO', 'Agentic', 'LCP', 'TBT', 'CLS', 'Report'], D.lighthouse.map((l) => l.scores
+    ? ['<span class="url">' + esc(l.url) + '</span>' + (l.runtimeError ? '<br>' + pill('error', l.runtimeError) : ''), score(l.scores.performance), score(l.scores.accessibility), score(l.scores['best-practices']), score(l.scores.seo), score(l.scores['agentic-browsing']), esc(l.metrics.LCP), esc(l.metrics.TBT), esc(l.metrics.CLS), link('lighthouse/' + l.file, 'open')]
+    : ['<span class="url">' + esc(l.url) + '</span>', pill('error', l.error), '', '', '', '', '', '', '', '']), [1, 2, 3, 4, 5]) +
   '<h2>Most common failing audits</h2>' + table(['Audit', 'Category', 'Pages', 'Example'], lhList.slice(0, 40).map((f) => [esc(f.title) + '<br><code class="muted">' + esc(f.id) + '</code>', esc(f.category), f.pages, esc(f.displayValue)]), [2]);
 
 S['SEO & Structure'] = () => '<h2>Findings by type</h2><div class="panel">' +

@@ -18,7 +18,7 @@ node audit.mjs example.com       # → reports/example.com-<timestamp>/report.ht
 3. **Links** — every internal + external href status-checked, with "found on" pages
 4. **Site** — security headers, HTTP→HTTPS redirect, soft-404 check
 5. **WAVE** — WebAIM API if you pass a key (paid credits); otherwise each page links to its free WAVE report
-6. **Lighthouse** — performance / accessibility / best practices / SEO on every page (or a sample with `--lighthouse N`: homepage + one page per section), full Lighthouse HTML per page
+6. **Lighthouse** — performance / accessibility / best practices / SEO / agentic browsing (llms.txt, WebMCP, agent accessibility tree) on every page (or a sample with `--lighthouse N`: homepage + one page per section), full Lighthouse HTML per page
 
 ## Output
 
