@@ -12,8 +12,11 @@ on:
       device:
         description: Lighthouse form factor
         type: choice
-        options: [mobile, desktop]
-        default: mobile
+        options: [both, mobile, desktop]
+        default: both
+      screenshots:
+        description: Pages to screenshot at 4 sizes (all, a number, or 0 for off)
+        default: all
       max_pages:
         description: Max pages to crawl
         default: '500'
@@ -49,6 +52,7 @@ jobs:
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
           node audit.mjs "$URL" --out "out/$NAME" \
             --lighthouse "${{ inputs.lighthouse }}" --device "${{ inputs.device }}" \
+            --screenshots "${{ inputs.screenshots }}" \
             --max-pages "${{ inputs.max_pages }}" --concurrency "${{ inputs.concurrency }}"
       - uses: actions/upload-artifact@v4
         with:

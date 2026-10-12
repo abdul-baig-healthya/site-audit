@@ -20,7 +20,8 @@ const { values: opt, positionals } = parseArgs({
     'max-pages': { type: 'string', default: '500' },
     concurrency: { type: 'string', default: '4' },
     lighthouse: { type: 'string', default: 'all' }, // number of pages, "all" or "0"
-    device: { type: 'string', default: 'mobile' }, // lighthouse form factor: mobile | desktop
+    device: { type: 'string', default: 'both' }, // lighthouse form factor: mobile | desktop | both
+    screenshots: { type: 'string', default: 'all' }, // number of pages, "all" or "0"
     'wave-key': { type: 'string', default: process.env.WAVE_API_KEY || '' },
     'wave-max': { type: 'string', default: '25' }, // WAVE API costs credits per page
     'ignore-robots': { type: 'boolean', default: false },
@@ -37,7 +38,8 @@ if (opt.help || !positionals[0]) {
   --max-pages <n>       Max pages to crawl/audit (default 500)
   --concurrency <n>     Parallel browser pages (default 4)
   --lighthouse <n|all>  Pages to run Lighthouse on (default all, 0 = off; ~20s/page)
-  --device <mobile|desktop>  Lighthouse form factor (default mobile)
+  --device <mobile|desktop|both>  Lighthouse form factor (default both)
+  --screenshots <n|all>  Pages to screenshot at mobile/tablet/laptop/desktop (default all, 0 = off)
   --wave-key <key>      WebAIM WAVE API key (or env WAVE_API_KEY)
   --wave-max <n>        Max pages sent to WAVE API (default 25)
   --ignore-robots       Crawl paths disallowed by robots.txt
@@ -53,12 +55,27 @@ const CONCURRENCY = Number(opt.concurrency);
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36 site-audit';
 const OUT = opt.out || path.join('reports', `${START.hostname}-${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}`);
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
+const LH_DEVICES = opt.device === 'both' ? ['mobile', 'desktop'] : [opt.device];
+const SCREENS = [ // standard viewports, CSS px
+  { id: 'mobile', label: 'Mobile', width: 390, height: 844, mobile: true }, // iPhone 12–15
+  { id: 'tablet', label: 'Tablet', width: 768, height: 1024, mobile: true }, // iPad (iPadOS sends a desktop UA)
+  { id: 'laptop', label: 'Laptop', width: 1366, height: 768 },
+  { id: 'desktop', label: 'Desktop', width: 1920, height: 1080 },
+];
+const SHOT_MAX_HEIGHT = 15000; // full-page captures are cut here to keep image size sane
+const MOBILE_UA = 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Mobile Safari/537.36 site-audit';
 const PAGE_TIMEOUT = 180000; // hard cap per page audit (axe/evaluate have no timeout of their own)
 let stopping = false;
 process.on('SIGINT', () => {
   if (stopping) process.exit(130);
   stopping = true;
   console.log('\n⚠ Ctrl+C: finishing in-flight pages, then writing a partial report. Press Ctrl+C again to quit immediately.');
+});
+// Lighthouse's waitForCPUIdle re-polls from a setTimeout, so a "Session closed" protocol error there
+// escapes every try/catch and would kill the run. Those carry protocolMethod; anything else still crashes.
+process.on('unhandledRejection', (e) => {
+  if (!e?.protocolMethod) throw e;
+  log(`  [lighthouse] ignored stray protocol error: ${e.message.split('\n')[0]}`);
 });
 const SKIP_EXT = /\.(pdf|jpe?g|png|gif|svg|webp|avif|ico|zip|gz|rar|docx?|xlsx?|pptx?|csv|mp[34]|mov|avi|webm|woff2?|ttf|css|js|json|xml|txt)$/i;
 
@@ -401,7 +418,7 @@ async function waveCheck(url, key) {
 
 // ---------- Lighthouse ----------
 
-function pickLighthousePages(urls, n) {
+function pickSample(urls, n) {
   if (n === Infinity || n >= urls.length) return urls;
   // homepage, then one page per top-level section, then fill in crawl order
   const picked = [urls[0]];
@@ -424,20 +441,20 @@ async function runLighthouse(urls, dir) {
   }
   const results = [];
   try {
-    for (const [i, url] of urls.entries()) {
+    for (const [i, url] of urls.entries()) for (const device of LH_DEVICES) {
       if (stopping) break;
-      log(`  [lighthouse ${i + 1}/${urls.length}] ${url}`);
+      log(`  [lighthouse ${i + 1}/${urls.length} ${device}] ${url}`);
       for (let attempt = 1; attempt <= 2; attempt++) try {
         const r = await lighthouse(url, {
           port: chrome.port, output: ['html', 'json'], logLevel: 'error',
           onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo', 'agentic-browsing'],
-        }, opt.device === 'desktop' ? desktopConfig : undefined);
-        const file = `lh-${String(i + 1).padStart(3, '0')}.html`;
+        }, device === 'desktop' ? desktopConfig : undefined);
+        const file = `lh-${String(i + 1).padStart(3, '0')}-${device}.html`;
         await writeFile(path.join(dir, file), r.report[0]);
         const lhr = r.lhr;
         const a = lhr.audits;
         results.push({
-          url, file,
+          url, device, file,
           scores: Object.fromEntries(Object.entries(lhr.categories).map(([k, c]) => [k, c.score == null ? null : Math.round(c.score * 100)])),
           metrics: {
             FCP: a['first-contentful-paint']?.displayValue, LCP: a['largest-contentful-paint']?.displayValue,
@@ -453,12 +470,61 @@ async function runLighthouse(urls, dir) {
         results.pop(); // page timed out / no paint: retry once
         await new Promise((r) => setTimeout(r, 10000));
       } catch (e) {
-        if (attempt === 2) results.push({ url, error: e.message.split('\n')[0] });
+        if (attempt === 2) results.push({ url, device, error: e.message.split('\n')[0] });
         else await new Promise((r) => setTimeout(r, 10000));
       }
     }
   } finally {
     chrome.kill();
+  }
+  return results;
+}
+
+// ---------- Screenshots ----------
+
+async function takeScreenshots(urls, dir) {
+  if (!urls.length) return [];
+  const results = urls.map((url) => ({ url, shots: [] }));
+  const browser = await chromium.launch({ handleSIGINT: false });
+  try {
+    for (const s of SCREENS) {
+      const ctx = await browser.newContext({
+        userAgent: s.id === 'mobile' ? MOBILE_UA : UA, ignoreHTTPSErrors: true,
+        viewport: { width: s.width, height: s.height }, isMobile: !!s.mobile, hasTouch: !!s.mobile,
+      });
+      let done = 0;
+      await pool(urls, CONCURRENCY, async (url, i) => {
+        const file = `${String(i + 1).padStart(3, '0')}-${s.id}.jpg`;
+        const page = await ctx.newPage();
+        try {
+          await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+          await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
+          // scroll through once so lazy images and scroll-triggered animations render, then back to top
+          // ('instant' beats CSS scroll-behavior: smooth, which would leave sticky headers mid-page)
+          const height = await page.evaluate(async (max) => {
+            const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+            const to = (top) => scrollTo({ top, behavior: 'instant' });
+            for (let y = 0; y < Math.min(document.documentElement.scrollHeight, max); y += innerHeight) { to(y); await wait(150); }
+            to(0); await wait(300);
+            return document.documentElement.scrollHeight;
+          }, SHOT_MAX_HEIGHT);
+          await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+          await page.screenshot({
+            path: path.join(dir, file), type: 'jpeg', quality: 70, fullPage: true, animations: 'disabled', timeout: 60000,
+            clip: { x: 0, y: 0, width: s.width, height: Math.min(height, SHOT_MAX_HEIGHT) },
+          });
+          results[i].shots.push({ device: s.id, file, height, truncated: height > SHOT_MAX_HEIGHT });
+        } catch (e) {
+          results[i].shots.push({ device: s.id, error: e.message.split('\n')[0] });
+        } finally {
+          await page.close().catch(() => {});
+        }
+        log(`  [screenshot ${s.id} ${++done}/${urls.length}] ${url}`);
+      });
+      await ctx.close();
+    }
+  } finally {
+    await browser.close();
   }
   return results;
 }
@@ -504,6 +570,7 @@ async function siteChecks(homeHeaders) {
 
 async function main() {
   await mkdir(path.join(OUT, 'lighthouse'), { recursive: true });
+  await mkdir(path.join(OUT, 'screenshots'), { recursive: true });
   const started = new Date();
   log(`Auditing ${START.href} → ${OUT}`);
 
@@ -567,6 +634,7 @@ async function main() {
     ...linkResults.filter((r) => !r.status || r.status >= 400),
   ];
   const site = await siteChecks(pageResults[0]?.headers);
+  log(`  ${linkResults.length} links checked, ${brokenLinks.length} broken`);
 
   const waveKey = opt['wave-key'];
   let wave = { enabled: !!waveKey, results: [] };
@@ -574,12 +642,19 @@ async function main() {
     const targets = htmlPages.slice(0, Number(opt['wave-max']));
     log(`Phase 4: WAVE API × ${targets.length}`);
     await pool(targets, 2, async (u) => { wave.results.push({ url: u, ...(await waveCheck(u, waveKey)) }); log(`  [wave] ${u}`); });
-  }
+  } else log('Phase 4: WAVE skipped (no --wave-key / WAVE_API_KEY)');
 
   const lhN = opt.lighthouse === 'all' ? Infinity : Number(opt.lighthouse);
-  const lhTargets = lhN ? pickLighthousePages(htmlPages, lhN) : [];
-  if (lhTargets.length) log(`Phase 5: Lighthouse (${opt.device}) × ${lhTargets.length}`);
+  const lhTargets = lhN ? pickSample(htmlPages, lhN) : [];
+  if (!lhTargets.length) log('Phase 5: Lighthouse skipped (--lighthouse 0)');
+  else log(`Phase 5: Lighthouse (${LH_DEVICES.join(' + ')}) × ${lhTargets.length}`);
   const lh = await runLighthouse(lhTargets, path.join(OUT, 'lighthouse'));
+
+  const shotN = opt.screenshots === 'all' ? Infinity : Number(opt.screenshots);
+  const shotTargets = shotN ? pickSample(htmlPages, shotN) : [];
+  if (!shotTargets.length) log('Phase 6: screenshots skipped (--screenshots 0)');
+  else log(`Phase 6: screenshots (${SCREENS.map((s) => s.id).join(', ')}) × ${shotTargets.length}`);
+  const screenshots = { screens: SCREENS, maxHeight: SHOT_MAX_HEIGHT, pages: await takeScreenshots(shotTargets, path.join(OUT, 'screenshots')) };
 
   const data = {
     target: START.href, started: started.toISOString(), finished: new Date().toISOString(),
@@ -594,7 +669,7 @@ async function main() {
     partial: stopping,
     pages: pageResults.filter(Boolean),
     links: { checked: linkResults.length + disc.pages.length, broken: brokenLinks, redirects: linkResults.filter((r) => r.redirected && r.internal).length },
-    site, wave, lighthouse: lh,
+    site, wave, lighthouse: lh, screenshots,
   };
 
   await writeFile(path.join(OUT, 'report.json'), JSON.stringify(data, null, 2));
@@ -613,7 +688,7 @@ function toCsv(data) {
   for (const w of data.wave.results) for (const [cat, c] of Object.entries(w.categories || {})) {
     if (['error', 'contrast', 'alert'].includes(cat)) for (const it of c.items) rows.push([w.url, 'wave', it.id, cat, it.count, it.description, '']);
   }
-  for (const l of data.lighthouse) for (const f of l.failing || []) rows.push([l.url, 'lighthouse', f.id, f.category, 1, f.title, f.displayValue]);
+  for (const l of data.lighthouse) for (const f of l.failing || []) rows.push([l.url, `lighthouse-${l.device}`, f.id, f.category, 1, f.title, f.displayValue]);
   for (const b of data.links.broken) rows.push([b.foundOn?.[0] || '', 'links', 'broken-link', b.status || 'error', 1, b.url, b.error || '']);
   return rows.map((r) => r.map((c) => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\n') + '\n';
 }

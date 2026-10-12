@@ -18,19 +18,21 @@ node audit.mjs example.com       # → reports/example.com-<timestamp>/report.ht
 3. **Links** — every internal + external href status-checked, with "found on" pages
 4. **Site** — security headers, HTTP→HTTPS redirect, soft-404 check
 5. **WAVE** — WebAIM API if you pass a key (paid credits); otherwise each page links to its free WAVE report
-6. **Lighthouse** — performance / accessibility / best practices / SEO / agentic browsing (llms.txt, WebMCP, agent accessibility tree) on every page (or a sample with `--lighthouse N`: homepage + one page per section), full Lighthouse HTML per page
+6. **Lighthouse** — performance / accessibility / best practices / SEO / agentic browsing (llms.txt, WebMCP, agent accessibility tree) on every page (or a sample with `--lighthouse N`: homepage + one page per section), full Lighthouse HTML per page, mobile and desktop
+7. **Screenshots** — full-page captures at mobile 390×844, tablet 768×1024, laptop 1366×768 and desktop 1920×1080, shown side by side in device frames (scroll inside each screen); cut at 15000px tall. A **Live** switch swaps them for interactive iframes of the current site at the same sizes (disabled when the page sends `X-Frame-Options` / CSP `frame-ancestors`)
 
 ## Output
 
-`report.html` (tabbed, filterable, light/dark) · `report.json` (everything) · `issues.csv` (one row per issue, for spreadsheets/Jira) · `urls.txt` · `lighthouse/*.html`
+`report.html` (tabbed, filterable, light/dark) · `report.json` (everything) · `issues.csv` (one row per issue, for spreadsheets/Jira) · `urls.txt` · `lighthouse/*.html` · `screenshots/*.jpg`
 
 ## Options
 
 ```
 --max-pages <n>         default 500
 --concurrency <n>       default 4
---lighthouse <n|all|0>  default all (~20s per page, sequential for stable scores)
---device mobile|desktop Lighthouse form factor (default mobile)
+--lighthouse <n|all|0>  default all (~20s per page per device, sequential for stable scores)
+--device mobile|desktop|both  Lighthouse form factor (default both, shown as Mobile / Desktop toggle)
+--screenshots <n|all|0> default all (4 JPEGs per page, roughly 1 MB together)
 --wave-key <key>        or env WAVE_API_KEY
 --wave-max <n>          default 25 (each page costs WAVE credits)
 --ignore-robots         crawl robots-disallowed paths

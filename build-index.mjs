@@ -10,7 +10,9 @@ for (const name of await readdir(reportsDir).catch(() => [])) {
   try {
     const d = JSON.parse(await readFile(path.join(reportsDir, name, 'report.json'), 'utf8'));
     const pages = d.pages.filter(Boolean);
-    const lh = d.lighthouse.filter((l) => l.scores);
+    const scored = d.lighthouse.filter((l) => l.scores);
+    const mobile = scored.filter((l) => (l.device ?? d.options.device) === 'mobile');
+    const lh = mobile.length ? mobile : scored; // mobile like PageSpeed; desktop-only runs fall back
     const avg = (k) => (lh.length ? Math.round(lh.reduce((s, l) => s + (l.scores[k] ?? 0), 0) / lh.length) : '–');
     rows.push({
       name, target: d.target, started: d.started, partial: d.partial, pages: pages.length,

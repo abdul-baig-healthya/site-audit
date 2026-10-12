@@ -75,6 +75,42 @@ ul.plain { margin: 6px 0; padding-left: 18px; }
 .bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--surface-2); margin-top: 8px; }
 .bar span { display: block; }
 .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.seg { display: flex; justify-content: center; gap: 4px; margin-bottom: 20px; }
+.seg button { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); padding: 10px 16px; font: inherit; cursor: pointer; }
+.seg button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: var(--surface-2); font-weight: 600; }
+.seg svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.frames { display: flex; flex-wrap: wrap; gap: 32px 40px; align-items: flex-end; justify-content: center; padding: 16px 0 8px; }
+.frame { margin: 0; display: flex; flex-direction: column; align-items: center; max-width: 100%; }
+.frame figcaption { margin-top: 12px; color: var(--muted); font-size: 12px; text-align: center; }
+.device { position: relative; width: 100%; background: #111113; box-shadow: 0 0 0 1px var(--border), 0 12px 32px rgba(0, 0, 0, .18); }
+.screen { overflow-y: auto; overflow-x: hidden; background: #fff; scrollbar-width: thin; }
+.screen img { display: block; width: 100%; height: auto; }
+.screen.live { overflow: hidden; }
+.screen iframe { display: block; border: 0; background: #fff; transform-origin: 0 0; }
+.seg button:disabled { opacity: .45; cursor: not-allowed; }
+.center { text-align: center; }
+.screen p { padding: 12px; color: #66645e; }
+.frame .base { display: none; }
+.frame.mobile { width: 250px; }
+.frame.mobile .device { padding: 34px 11px 30px; border-radius: 40px; }
+.frame.mobile .device::before { content: ""; position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 70px; height: 16px; border-radius: 10px; background: #000; box-shadow: inset 0 0 0 1px #2a2a2e; }
+.frame.mobile .device::after { content: ""; position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; border-radius: 2px; background: #5a5a60; }
+.frame.mobile .screen { border-radius: 6px; }
+.frame.tablet { width: 380px; }
+.frame.tablet .device { padding: 26px 18px; border-radius: 28px; }
+.frame.tablet .device::before { content: ""; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 7px; height: 7px; border-radius: 50%; background: #2a2a2e; }
+.frame.tablet .screen { border-radius: 4px; }
+.frame.laptop { width: min(620px, 100%); padding: 0 30px; }
+.frame.laptop .device { padding: 18px 14px 16px; border-radius: 16px 16px 0 0; }
+.frame.laptop .device::before { content: ""; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; border-radius: 50%; background: #2a2a2e; }
+.frame.laptop .base { display: block; position: relative; width: calc(100% + 60px); height: 16px; border-radius: 0 0 18px 18px; background: linear-gradient(#e4e4e7, #9f9fa6); }
+.frame.laptop .base::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 6px; border-radius: 0 0 8px 8px; background: #b9b9bf; }
+.frame.desktop { width: min(680px, 100%); }
+.frame.desktop .device { padding: 14px 14px 34px; border-radius: 14px; }
+.frame.desktop .device::after { content: ""; position: absolute; bottom: 13px; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; border-radius: 50%; background: #2a2a2e; }
+.frame.desktop .base { display: block; position: relative; width: 220px; height: 64px; }
+.frame.desktop .base::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 58px; background: linear-gradient(90deg, #a1a1aa, #d4d4d8, #a1a1aa); clip-path: polygon(22% 0, 78% 0, 90% 100%, 10% 100%); }
+.frame.desktop .base::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; border-radius: 4px; background: linear-gradient(#d4d4d8, #9f9fa6); }
 .theme { float: right; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit; }
 @media (max-width: 600px) { .card .v { font-size: 22px; } th, td { padding: 6px; } }
 </style>
@@ -127,11 +163,17 @@ for (const p of pages) for (const m of p.htmlValidation?.messages || []) {
 const htmlList = Object.values(htmlAgg).sort((a, b) => b.pages.size - a.pages.size);
 const htmlErrors = pages.reduce((s, p) => s + (p.htmlValidation?.errors || 0), 0);
 
+const LH_CATS = [['performance', 'Performance'], ['accessibility', 'Accessibility'], ['best-practices', 'Best practices'], ['seo', 'SEO'], ['agentic-browsing', 'Agentic browsing']];
+const lhDevice = (l) => l.device ?? D.options.device; // older reports ran one device and stored it in options
+const lhDevices = ['mobile', 'desktop'].filter((d) => D.lighthouse.some((l) => lhDevice(l) === d));
 const lh = D.lighthouse.filter((l) => l.scores);
-const avg = (k) => (lh.length ? Math.round(lh.reduce((s, l) => s + (l.scores[k] ?? 0), 0) / lh.length) : null);
-const lhAgg = {};
-for (const l of lh) for (const f of l.failing) (lhAgg[f.id] ||= { ...f, pages: 0 }).pages++;
-const lhList = Object.values(lhAgg).sort((a, b) => b.pages - a.pages);
+const lhOf = (d) => lh.filter((l) => lhDevice(l) === d);
+const avg = (k, list) => (list.length ? Math.round(list.reduce((s, l) => s + (l.scores[k] ?? 0), 0) / list.length) : null);
+const failingAudits = (list) => {
+  const agg = {};
+  for (const l of list) for (const f of l.failing) (agg[f.id] ||= { ...f, pages: 0 }).pages++;
+  return Object.values(agg).sort((a, b) => b.pages - a.pages);
+};
 
 const waveErr = D.wave.results.reduce((s, w) => s + (w.categories?.error?.count || 0) + (w.categories?.contrast?.count || 0), 0);
 const dur = Math.round((new Date(D.finished) - new Date(D.started)) / 1000);
@@ -151,7 +193,7 @@ S.Overview = () => {
     card(D.links.broken.length, 'Broken links / pages') +
     card(htmlErrors, 'HTML validation errors') +
     (D.wave.enabled ? card(waveErr, 'WAVE errors + contrast') : '') +
-    (lh.length ? [['performance', 'Lighthouse perf'], ['accessibility', 'Lighthouse a11y'], ['best-practices', 'Lighthouse best pr.'], ['seo', 'Lighthouse SEO'], ['agentic-browsing', 'Lighthouse agentic']].map(([k, l]) => card(score(avg(k)), l + ' (avg)')).join('') : '') +
+    (lh.length ? LH_CATS.map(([k, l]) => card(lhDevices.map((d) => score(avg(k, lhOf(d)))).join(' '), 'Lighthouse ' + l.toLowerCase() + ' (avg ' + lhDevices.join(' / ') + ')')).join('') : '') +
     '</div>' +
     '<h2>axe-core failing elements by impact</h2><div class="panel" style="padding:14px">' +
     IMPACTS.map((i) => pill(i, i + ': ' + impactNodes[i])).join(' ') +
@@ -203,8 +245,7 @@ S.Pages = () => '<h2>All audited pages</h2><input type="search" id="pq" placehol
 function pageDetail(p) {
   if (p.error) return '<p>' + pill('error', p.error) + '</p>';
   const s = p.structure;
-  const lhr = D.lighthouse.find((l) => l.url === p.url);
-  return '<p>' + link(p.url, 'Open page') + ' · ' + waveLink(p.url) + (lhr?.file ? ' · ' + link('lighthouse/' + lhr.file, 'Lighthouse report') : '') + ' · ' + (p.inSitemap ? 'in sitemap' : pill('notice', 'not in sitemap')) + '</p>' +
+  return '<p>' + link(p.url, 'Open page') + ' · ' + waveLink(p.url) + D.lighthouse.filter((l) => l.url === p.url && l.file).map((l) => ' · ' + link('lighthouse/' + l.file, 'Lighthouse ' + lhDevice(l))).join('') + ' · ' + (p.inSitemap ? 'in sitemap' : pill('notice', 'not in sitemap')) + '</p>' +
     '<div class="two"><div><h3>Document</h3>' + table(['Field', 'Value'], [
       ['Title', esc(s.title) + ' <span class="muted">(' + s.titleLength + ')</span>'], ['Meta description', esc(s.metaDescription || '—')],
       ['lang', esc(s.lang ?? '—')], ['Canonical', esc(s.canonical ?? '—')], ['Robots meta', esc(s.robotsMeta ?? '—')],
@@ -224,11 +265,58 @@ function pageDetail(p) {
 }
 
 S.Lighthouse = () => !D.lighthouse.length ? '<p class="muted">Lighthouse not run (use <code>--lighthouse N</code>).</p>' :
-  '<h2>Lighthouse (' + esc(D.options.device) + ') — ' + lh.length + ' pages</h2>' +
-  table(['Page', 'Perf', 'A11y', 'Best pr.', 'SEO', 'Agentic', 'LCP', 'TBT', 'CLS', 'Report'], D.lighthouse.map((l) => l.scores
+  '<div class="seg" role="tablist" aria-label="Form factor">' + lhDevices.map((d, i) => '<button type="button" role="tab" data-device="' + d + '" aria-selected="' + (i === 0) + '">' + DEVICE_ICON[d] + d[0].toUpperCase() + d.slice(1) + '</button>').join('') + '</div>' +
+  lhDevices.map((d, i) => '<div data-device-panel="' + d + '"' + (i ? ' hidden' : '') + '>' + lhPanel(d) + '</div>').join('');
+const DEVICE_ICON = {
+  mobile: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>',
+  desktop: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M1 20h22"/></svg>',
+};
+const lhPanel = (d) => '<div class="cards">' + LH_CATS.map(([k, l]) => card(score(avg(k, lhOf(d))), l + ' (avg)')).join('') + '</div>' +
+  '<h2>Lighthouse (' + d + ') — ' + lhOf(d).length + ' pages</h2>' +
+  table(['Page', 'Perf', 'A11y', 'Best pr.', 'SEO', 'Agentic', 'LCP', 'TBT', 'CLS', 'Report'], D.lighthouse.filter((l) => lhDevice(l) === d).map((l) => l.scores
     ? ['<span class="url">' + esc(l.url) + '</span>' + (l.runtimeError ? '<br>' + pill('error', l.runtimeError) : ''), score(l.scores.performance), score(l.scores.accessibility), score(l.scores['best-practices']), score(l.scores.seo), score(l.scores['agentic-browsing']), esc(l.metrics.LCP), esc(l.metrics.TBT), esc(l.metrics.CLS), link('lighthouse/' + l.file, 'open')]
     : ['<span class="url">' + esc(l.url) + '</span>', pill('error', l.error), '', '', '', '', '', '', '', '']), [1, 2, 3, 4, 5]) +
-  '<h2>Most common failing audits</h2>' + table(['Audit', 'Category', 'Pages', 'Example'], lhList.slice(0, 40).map((f) => [esc(f.title) + '<br><code class="muted">' + esc(f.id) + '</code>', esc(f.category), f.pages, esc(f.displayValue)]), [2]);
+  '<h2>Most common failing audits</h2>' + table(['Audit', 'Category', 'Pages', 'Example'], failingAudits(lhOf(d)).slice(0, 40).map((f) => [esc(f.title) + '<br><code class="muted">' + esc(f.id) + '</code>', esc(f.category), f.pages, esc(f.displayValue)]), [2]);
+
+S.Screenshots = () => !D.screenshots?.pages.length ? '<p class="muted">Screenshots not taken (use <code>--screenshots N</code>).</p>' :
+  '<h2>Screenshots — ' + D.screenshots.pages.length + ' pages × ' + D.screenshots.screens.map((s) => s.label + ' ' + s.width + '×' + s.height).join(' · ') + '</h2>' +
+  '<p class="muted">Open a page to compare it at each size. Scroll inside a screen to see the rest of the page.</p>' +
+  '<input type="search" placeholder="Filter by URL…" aria-label="Filter screenshots by URL"><div class="panel">' +
+  D.screenshots.pages.map((p, i) => {
+    const errs = p.shots.filter((s) => s.error).length;
+    return '<details data-url="' + esc(p.url) + '" data-shot="' + i + '"><summary><span class="url grow">' + esc(p.url) + '</span>' + (errs ? pill('error', errs + ' failed') : '') + '</summary><div class="det"></div></details>';
+  }).join('') + '</div>';
+// Why the browser would refuse to show this page in an iframe, from the headers captured at audit time.
+const framingBlocked = (url) => {
+  const h = pages.find((p) => p.url === url)?.headers || {};
+  const xfo = h['x-frame-options'];
+  const ancestors = h['content-security-policy']?.match(/frame-ancestors([^;]*)/i)?.[1].trim();
+  if (xfo && /deny|sameorigin/i.test(xfo)) return 'X-Frame-Options: ' + xfo;
+  if (ancestors != null && !ancestors.split(' ').includes('*')) return 'Content-Security-Policy frame-ancestors ' + (ancestors || "'none'");
+  return null;
+};
+const shotView = (i, live) => {
+  const p = D.screenshots.pages[i];
+  const blocked = framingBlocked(p.url);
+  const tab = (view, label, on, off) => '<button type="button" role="tab" data-view="' + view + '" aria-selected="' + on + '"' + (off ? ' disabled' : '') + '>' + label + '</button>';
+  return '<div class="seg" role="tablist" aria-label="View">' + tab('shot', 'Screenshot', !live) + tab('live', 'Live', live, blocked) + '</div>' +
+    (blocked ? '<p class="muted center">Live view unavailable: this page sends <code>' + esc(blocked) + '</code>, so browsers refuse to show it in a frame.</p>'
+      : live ? '<p class="muted center">Live: the site as it is now, not at audit time. Widths match each device; touch and mobile user-agent are not emulated.</p>' : '') +
+    '<div class="frames">' + frames(p, live) + '</div>';
+};
+const frames = (p, live) => D.screenshots.screens.map((s) => {
+  const shot = p.shots.find((x) => x.device === s.id) || { error: 'not captured' };
+  const screen = live
+    ? '<iframe src="' + esc(p.url) + '" title="' + esc(s.label + ' live view of ' + p.url) + '" data-w="' + s.width + '" style="width:' + s.width + 'px;height:' + s.height + 'px"></iframe>'
+    : shot.file ? '<img src="screenshots/' + esc(shot.file) + '" alt="' + esc(s.label + ' view of ' + p.url) + '" loading="lazy">' : '<p>' + esc(shot.error) + '</p>';
+  return '<figure class="frame ' + s.id + '"><div class="device"><div class="screen' + (live ? ' live' : '') + '" style="aspect-ratio:' + s.width + '/' + s.height + '">' + screen +
+    '</div></div><div class="base"></div><figcaption>' + esc(s.label) + ' · ' + s.width + '×' + s.height +
+    (!live && shot.truncated ? ' · first ' + D.screenshots.maxHeight + 'px of ' + shot.height : '') +
+    (!live && shot.file ? ' · ' + link('screenshots/' + shot.file, 'full image') : '') + '</figcaption></figure>';
+}).join('');
+// live iframes render at the real device width, scaled down to fit the frame's screen
+const fitFrames = (root) => { for (const f of root.querySelectorAll('.screen iframe')) f.style.transform = 'scale(' + f.parentElement.clientWidth / f.dataset.w + ')'; };
+addEventListener('resize', () => fitFrames(document));
 
 S['SEO & Structure'] = () => '<h2>Findings by type</h2><div class="panel">' +
   structList.map((r) => '<details><summary>' + pill(r.severity) + '<strong class="grow">' + esc(r.id) + '</strong><span class="muted">' + r.pages.length + ' pages</span></summary><div class="det">' +
@@ -276,9 +364,26 @@ function show(name) {
     sec.innerHTML = S[name]();
     main.appendChild(sec);
     rendered[name] = true;
-    if (name === 'Pages') sec.querySelector('#pq').addEventListener('input', (e) => {
+    sec.querySelector('input[type=search]')?.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase();
-      for (const d of sec.querySelectorAll('#plist > details')) d.hidden = !d.dataset.url.toLowerCase().includes(q);
+      for (const d of sec.querySelectorAll('details[data-url]')) d.hidden = !d.dataset.url.toLowerCase().includes(q);
+    });
+    if (name === 'Screenshots') sec.addEventListener('toggle', (e) => { // toggle doesn't bubble, so capture
+      const d = e.target;
+      if (d.open && d.dataset.shot && !d.dataset.done) { d.dataset.done = 1; d.querySelector('.det').innerHTML = shotView(d.dataset.shot, false); }
+    }, true);
+    if (name === 'Screenshots') sec.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-view]');
+      if (!b || b.disabled || b.getAttribute('aria-selected') === 'true') return;
+      const det = b.closest('.det');
+      det.innerHTML = shotView(b.closest('details').dataset.shot, b.dataset.view === 'live');
+      fitFrames(det);
+    });
+    if (name === 'Lighthouse') sec.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-device]');
+      if (!b) return;
+      for (const x of sec.querySelectorAll('[data-device]')) x.setAttribute('aria-selected', x === b);
+      for (const p of sec.querySelectorAll('[data-device-panel]')) p.hidden = p.dataset.devicePanel !== b.dataset.device;
     });
   }
   try { localStorage.setItem('tab', name); } catch {}
